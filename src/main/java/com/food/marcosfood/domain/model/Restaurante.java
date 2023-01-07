@@ -2,7 +2,7 @@ package com.food.marcosfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.food.marcosfood.Gruops;
+import com.food.marcosfood.core.validation.Gruops;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
