@@ -2,6 +2,7 @@ package com.food.marcosfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.food.marcosfood.TaxaFrete;
 import com.food.marcosfood.core.validation.Gruops;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,7 +36,8 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero
+   // @PositiveOrZero
+    @TaxaFrete
     @NotNull
     @Column(nullable = false)
     private BigDecimal taxaFrete;
