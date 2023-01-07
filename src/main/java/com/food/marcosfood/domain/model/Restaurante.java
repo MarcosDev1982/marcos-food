@@ -1,7 +1,8 @@
 package com.food.marcosfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.food.marcosfood.Gruops;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +10,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +31,26 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
+    @PositiveOrZero
+    @NotNull
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
-    @JsonIgnore
-    //@JsonIgnoreProperties("hibernateLazyInitializer")
-    @ManyToOne//(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cozinha_id",nullable = false)
+
+    @Valid
+    @ConvertGroup(from = Default.class, to = Gruops.CozinhaId.class)
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "restaurante_forma_pagamento", joinColumns =@JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id") )
+    @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaDePagamento> formasDePagamento = new ArrayList<>();
 
     @OneToMany
@@ -58,14 +68,14 @@ public class Restaurante {
 
     @JsonIgnore
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "datetime")
+    @Column(columnDefinition = "datetime")
     private LocalDateTime dataAtualizacao;
 
     @OneToMany
     private List<Produto> produtos = new ArrayList<>();
 
     @ManyToMany
-    private  List<Grupo> grupos = new ArrayList<>();
+    private List<Grupo> grupos = new ArrayList<>();
 
 
 }

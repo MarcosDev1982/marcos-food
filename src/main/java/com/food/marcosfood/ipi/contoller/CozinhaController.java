@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,7 @@ public class CozinhaController {
     }
 
     @PostMapping
-    private ResponseEntity<Cozinha> criarCozinha(@RequestBody Cozinha cozinha) {
+    private ResponseEntity<Cozinha> criarCozinha(@RequestBody @Valid Cozinha cozinha) {
         return ResponseEntity.status(HttpStatus.CREATED).body(cozinhaService.salvar(cozinha));
     }
 

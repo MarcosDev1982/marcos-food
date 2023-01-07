@@ -9,7 +9,7 @@ public class RestuaranteNaoEncontadaException extends EntidadeNaoEncotrada {
         super(mensagem);
     }
 
-    public RestuaranteNaoEncontadaException(Long idEstado ) {
-        this(String.format(" O restaurante com o codigo %d não foi encontrada",idEstado));
+    public RestuaranteNaoEncontadaException(Long restauranteId ) {
+        this(String.format(" O restaurante com o codigo %d não foi encontrada",restauranteId));
     }
 }

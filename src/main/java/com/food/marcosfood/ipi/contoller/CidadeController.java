@@ -2,16 +2,13 @@ package com.food.marcosfood.ipi.contoller;
 
 import com.food.marcosfood.domain.exception.*;
 import com.food.marcosfood.domain.model.Cidade;
-import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.service.CidadeService;
-import com.food.marcosfood.ipi.exceptionhander.Problema;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,10 +27,10 @@ public class CidadeController {
     @GetMapping("/{cidadeId}")
     public Cidade findAllById(@PathVariable Long cidadeId) {
         try {
-           return cidadeService.findByIdCidade(cidadeId);
+            return cidadeService.findByIdCidade(cidadeId);
 
         } catch (CozinhaNaoEncontadaException e) {
-           throw new NegocioExcepetion(e.getMessage(), e);
+            throw new NegocioExcepetion(e.getMessage(), e);
         }
 
     }
@@ -45,7 +42,7 @@ public class CidadeController {
             return cidadeService.cadastraCidade(cidade);
         } catch (EstadoNaoEncotradoException e) {
 
-            throw new NegocioExcepetion(e.getMessage(),e);
+            throw new NegocioExcepetion(e.getMessage(), e);
 
         }
 
@@ -54,38 +51,21 @@ public class CidadeController {
     @PutMapping("/{cidadeId}")
     public Cidade alterCidade(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
 
-        try {
-            Cidade cidadeAtual = cidadeService.findByIdCidade(cidadeId);
-            BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-            return cidadeService.cadastraCidade(cidadeAtual);
 
-        } catch (CidadeNaoEncontadaException e){
-            throw new NegocioExcepetion(e.getMessage(), e);
-        } catch (EstadoNaoEncotradoException e) {
+        Cidade cidadeAtual = cidadeService.findByIdCidade(cidadeId);
+        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+        return cidadeService.cadastraCidade(cidadeAtual);
 
-            throw new NegocioExcepetion(e.getMessage(), e);
-
-        }
 
     }
 
     @DeleteMapping("/{cidadeId}")
-    public ResponseEntity<Restaurante> delete(@PathVariable Long cidadeId) {
-        try {
-            cidadeService.remover(cidadeId);
-            return ResponseEntity.noContent().build();
+    public void delete(@PathVariable Long cidadeId) {
 
-        } catch (EntidadeNaoEncotrada e) {
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        cidadeService.remover(cidadeId);
 
 
     }
-
-
 
 
 }

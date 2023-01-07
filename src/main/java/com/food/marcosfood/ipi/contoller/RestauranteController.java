@@ -1,6 +1,7 @@
 package com.food.marcosfood.ipi.contoller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.food.marcosfood.Gruops;
 import com.food.marcosfood.domain.exception.*;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.service.RestauranteService;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +43,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante InsereRestaurante(@RequestBody Restaurante restaurante) {
+    public Restaurante InsereRestaurante(@RequestBody @Valid Restaurante restaurante) {
 
         try {
             return restauranteService.inserir(restaurante);
@@ -54,7 +57,7 @@ public class RestauranteController {
 
     // estudar a aula 6.3 na verdade revisar
     @PutMapping("/teste/{restuarenteId}")
-    public Restaurante updadte(@PathVariable Long restuarenteId, @RequestBody Restaurante restaurante) {
+    public Restaurante updadte(@PathVariable @Valid Long restuarenteId, @RequestBody Restaurante restaurante) {
 
         try {
             Restaurante restauranteAtual = restauranteService.buscarPorId(restuarenteId);
