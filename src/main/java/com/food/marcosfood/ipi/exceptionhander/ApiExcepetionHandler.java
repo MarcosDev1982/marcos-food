@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +30,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-
 
 
 @ControllerAdvice
@@ -58,10 +57,10 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
                     String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
                     String name = objectError.getObjectName();
 
-                    if (objectError instanceof FieldError){
+                    if (objectError instanceof FieldError) {
                         name = ((FieldError) objectError).getField();
                     }
-                           return   Problema.Object.builder()
+                    return Problema.Object.builder()
                             .name(name)
                             .userMensager(message)
                             .build();
@@ -75,6 +74,7 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
@@ -194,7 +194,7 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
                                                          WebRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
-        ProblemaType problemType =ProblemaType.ENTIDADE_NAO_ENCONTRADA;
+        ProblemaType problemType = ProblemaType.ENTIDADE_NAO_ENCONTRADA;
         String detail = ex.getMessage();
 
         Problema problem = createProblemBuilder(status, problemType, detail)
@@ -256,7 +256,7 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
     }
 
     private Problema.ProblemaBuilder createProblemBuilder(HttpStatus status,
-                                                        ProblemaType problemType, String detail) {
+                                                          ProblemaType problemType, String detail) {
 
         return Problema.builder()
                 .timestamp(LocalDateTime.now())
@@ -271,7 +271,6 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
                 .map(ref -> ref.getFieldName())
                 .collect(Collectors.joining("."));
     }
-
 
 
 }
