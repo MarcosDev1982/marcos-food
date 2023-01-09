@@ -2,8 +2,10 @@ package com.food.marcosfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.food.marcosfood.TaxaFrete;
+import com.food.marcosfood.core.validation.Multiplo;
+import com.food.marcosfood.core.validation.TaxaFrete;
 import com.food.marcosfood.core.validation.Gruops;
+import com.food.marcosfood.core.validation.ValorZeroIncluiDescricao;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
@@ -36,7 +39,7 @@ public class Restaurante {
     @Column(nullable = false)
     private String nome;
 
-   // @PositiveOrZero
+    @PositiveOrZero
     @TaxaFrete
     @NotNull
     @Column(nullable = false)
