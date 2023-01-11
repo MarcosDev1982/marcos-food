@@ -6,9 +6,11 @@ import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.service.CozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.aspectj.lang.annotation.Before;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,14 +31,22 @@ public class CadastroCozinhaControllerIT {
     @Autowired
     private CozinhaService cozinhaService;
 
+
+    @BeforeEach
+    public void setUp(){
+
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        RestAssured.port= port;
+        RestAssured.basePath="/cozinha/cozinhas";
+
+    }
+
     @Test
     public void deveRertornaStatus200QuandoConsultarCozinha(){
 
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         RestAssured.given()
                 .basePath("/cozinha/cozinhas")
-                .port(port)
+
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
@@ -47,11 +57,9 @@ public class CadastroCozinhaControllerIT {
     @Test
     public void deveConter7CozinhasQuandoConsultarCozinha(){
 
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
 
         RestAssured.given()
-                .basePath("/cozinha/cozinhas")
-                .port(port)
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
