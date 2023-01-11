@@ -22,7 +22,7 @@ import javax.validation.ConstraintViolationException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CadastroCozinhaControllerIT {
 
     @LocalServerPort
@@ -32,21 +32,18 @@ public class CadastroCozinhaControllerIT {
     private CozinhaService cozinhaService;
 
 
-    @BeforeEach
-    public void setUp(){
+  @BeforeEach
+    public void setUp() {
 
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        RestAssured.port= port;
-        RestAssured.basePath="/cozinha/cozinhas";
+        RestAssured.port = port;
+       /* RestAssured.basePath = "/cozinha/cozinhas";*/
 
     }
-
     @Test
-    public void deveRertornaStatus200QuandoConsultarCozinha(){
+    public void deveRertornaStatus200QuandoConsultarCozinha() {
 
         RestAssured.given()
-                .basePath("/cozinha/cozinhas")
-
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
@@ -55,11 +52,10 @@ public class CadastroCozinhaControllerIT {
 
 
     @Test
-    public void deveConter7CozinhasQuandoConsultarCozinha(){
-
-
+    public void deveConter7CozinhasQuandoConsultarCozinha() {
 
         RestAssured.given()
+                .basePath("/cozinha")
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
@@ -67,6 +63,18 @@ public class CadastroCozinhaControllerIT {
                 .body("nome", Matchers.hasItems("Indiana", "Argentina"));
     }
 
+    @Test
+    public void deveRertornaStatus201QuandoCadastraCozinha() {
+
+        RestAssured.given()
+                .basePath("/cozinha")
+                .body("{\"nome\": \"Chinesa\"}")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when().post()
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
 
 
 }
