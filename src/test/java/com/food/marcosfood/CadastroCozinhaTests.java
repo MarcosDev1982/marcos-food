@@ -1,9 +1,12 @@
 package com.food.marcosfood;
 
+import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
+import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.service.CozinhaService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
@@ -21,7 +24,6 @@ public class CadastroCozinhaTests {
 
     @Autowired
     private CozinhaService cozinhaService;
-
 
 
     @Test
@@ -50,9 +52,31 @@ public class CadastroCozinhaTests {
         assertThat(erroEsperado).isNotNull();
     }
 
+    @Test
+    public void testarFalhaAoExcluirCozinhaEmUso() {
+
+        Cozinha novaCozinha = new Cozinha();
+        novaCozinha.setId(1L);
 
 
+        EntidadeEmUsoException erroEsperado = Assertions.assertThrows(EntidadeEmUsoException.class, () -> cozinhaService.deleta(novaCozinha.getId()));
+
+        assertThat(erroEsperado).isNotNull();
+
+    }
+
+    @Test
+    public void testarFalharExcluirCozinhaInexistente() {
+
+        Cozinha novaCozinha = new Cozinha();
+        novaCozinha.setId(300L);
+
+        EntidadeNaoEncotrada erroEsperado = Assertions.assertThrows(EntidadeNaoEncotrada.class, () -> cozinhaService.deleta(novaCozinha.getId()));
+
+        assertThat(erroEsperado).isNotNull();
+
+    }
 
 
-};
+}
 
