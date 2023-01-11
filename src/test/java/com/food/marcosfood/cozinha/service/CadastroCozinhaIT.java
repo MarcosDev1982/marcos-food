@@ -1,4 +1,4 @@
-package com.food.marcosfood;
+package com.food.marcosfood.cozinha.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
@@ -20,7 +20,7 @@ import javax.validation.ConstraintViolationException;
 
 
 @SpringBootTest
-public class CadastroCozinhaTests {
+public class CadastroCozinhaIT {
 
     @Autowired
     private CozinhaService cozinhaService;
