@@ -7,6 +7,7 @@ import com.food.marcosfood.domain.service.CozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.aspectj.lang.annotation.Before;
+import org.flywaydb.core.Flyway;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.validation.ConstraintViolationException;
 
@@ -23,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 public class CadastroCozinhaControllerIT {
 
     @LocalServerPort
@@ -31,15 +34,20 @@ public class CadastroCozinhaControllerIT {
     @Autowired
     private CozinhaService cozinhaService;
 
+    @Autowired
+    private Flyway flyway;
 
-  @BeforeEach
+
+    @BeforeEach
     public void setUp() {
 
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
-       /* RestAssured.basePath = "/cozinha/cozinhas";*/
+        RestAssured.basePath = "/cozinha/cozinhas";
+        flyway.migrate();
 
     }
+
     @Test
     public void deveRertornaStatus200QuandoConsultarCozinha() {
 
@@ -55,7 +63,6 @@ public class CadastroCozinhaControllerIT {
     public void deveConter7CozinhasQuandoConsultarCozinha() {
 
         RestAssured.given()
-                .basePath("/cozinha")
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
