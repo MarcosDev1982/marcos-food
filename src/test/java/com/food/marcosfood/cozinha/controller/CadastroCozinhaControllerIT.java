@@ -1,16 +1,11 @@
 package com.food.marcosfood.cozinha.controller;
 
-import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
-import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
+import com.food.marcosfood.cozinha.DatabaseCleaner;
 import com.food.marcosfood.domain.model.Cozinha;
-import com.food.marcosfood.domain.service.CozinhaService;
+import com.food.marcosfood.domain.repository.CozinhaRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.aspectj.lang.annotation.Before;
-import org.flywaydb.core.Flyway;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
-
-import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,10 +25,11 @@ public class CadastroCozinhaControllerIT {
     private int port;
 
     @Autowired
-    private CozinhaService cozinhaService;
+    private CozinhaRepository cozinhaRepository;
+
 
     @Autowired
-    private Flyway flyway;
+    DatabaseCleaner databaseCleaner;
 
 
     @BeforeEach
@@ -44,8 +38,8 @@ public class CadastroCozinhaControllerIT {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinha/cozinhas";
-        flyway.migrate();
-
+        databaseCleaner.clearTables();
+        preparaDados();
     }
 
     @Test
@@ -60,14 +54,14 @@ public class CadastroCozinhaControllerIT {
 
 
     @Test
-    public void deveConter7CozinhasQuandoConsultarCozinha() {
+    public void deveConter1CozinhasQuandoConsultarCozinha() {
 
         RestAssured.given()
                 .accept(ContentType.JSON)
                 .when().get()
                 .then()
-                .body("", Matchers.hasSize(7))
-                .body("nome", Matchers.hasItems("Indiana", "Argentina"));
+                .body("", Matchers.hasSize(1))
+                .body("nome", Matchers.hasItems("Tailandesa"));
     }
 
     @Test
@@ -81,6 +75,13 @@ public class CadastroCozinhaControllerIT {
                 .when().post()
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    private void preparaDados() {
+        Cozinha cozinha1 = new Cozinha();
+        cozinha1.setNome("Tailandesa");
+        cozinhaRepository.save(cozinha1);
+
     }
 
 

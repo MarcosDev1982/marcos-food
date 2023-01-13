@@ -30,6 +30,7 @@ public class CozinhaController {
 
     @GetMapping("/{cozinhaId}")
     private Cozinha buscarPorId(@PathVariable Long cozinhaId) {
+
         return cozinhaService.buscarPorId(cozinhaId);
     }
 
@@ -59,7 +60,7 @@ public class CozinhaController {
     }
 
     @ExceptionHandler(EntidadeNaoEncotrada.class)
-    public ResponseEntity<?> tratarErro(EntidadeNaoEncotrada e){
+    public ResponseEntity<?> tratarErro(EntidadeNaoEncotrada e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage());
     }
