@@ -2,6 +2,7 @@ package com.food.marcosfood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.food.marcosfood.core.validation.Multiplo;
 import com.food.marcosfood.core.validation.TaxaFrete;
 import com.food.marcosfood.core.validation.Gruops;
@@ -45,7 +46,7 @@ public class Restaurante {
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
-
+    @JsonIgnoreProperties(value = "nome", allowGetters = true)
     @Valid
     @ConvertGroup(from = Default.class, to = Gruops.CozinhaId.class)
     @NotNull
