@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class CidadeService {
 
     }
 
+    @Transactional
     public Cidade cadastraCidade(Cidade cidadeAtual) {
         Long estadoId = cidadeAtual.getEstado().getId();
         Estado estado = estadoService.buscarPorId(estadoId);
@@ -48,14 +50,14 @@ public class CidadeService {
 
     public Cidade alteraCidade(Long cidadeId, Cidade cidade) {
         if (!cidadeRepository.existsById(cidadeId)) {
-            new CidadeNaoEncontadaException( cidadeId);
+            new CidadeNaoEncontadaException(cidadeId);
         }
         cidade.setId(cidadeId);
         return cidadeRepository.save(cidade);
     }
 
 
-
+    @Transactional
     public void remover(Long cidadeId) {
         try {
 

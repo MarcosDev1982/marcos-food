@@ -1,5 +1,7 @@
 package com.food.marcosfood.cozinha.controller;
 
+import static org.hamcrest.Matchers.equalTo;
+
 import com.food.marcosfood.cozinha.DatabaseCleaner;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.repository.CozinhaRepository;
@@ -75,6 +77,32 @@ public class CadastroCozinhaControllerIT {
                 .when().post()
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRertornaStatus200QuandoConsultarCozinhaExistente() {
+
+        RestAssured.given()
+                .basePath("/cozinha")
+                .pathParam("cozinhaId", 1)
+                .accept(ContentType.JSON)
+                .when().get("/{cozinhaId}")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Tailandesa"));
+    }
+
+    @Test
+    public void deveRertornaStatus404QuandoConsultarCozinhaInexistente() {
+
+        RestAssured.given()
+                .basePath("/cozinha")
+                .pathParam("cozinhaId", 100)
+                .accept(ContentType.JSON)
+                .when().get("/{cozinhaId}")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+
     }
 
     private void preparaDados() {
