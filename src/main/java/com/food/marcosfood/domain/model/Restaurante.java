@@ -1,9 +1,7 @@
 package com.food.marcosfood.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.food.marcosfood.core.validation.Multiplo;
+
 import com.food.marcosfood.core.validation.TaxaFrete;
 import com.food.marcosfood.core.validation.Gruops;
 import com.food.marcosfood.core.validation.ValorZeroIncluiDescricao;
@@ -46,7 +44,6 @@ public class Restaurante {
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
-    @JsonIgnoreProperties(value = "nome", allowGetters = true)
     @Valid
     @ConvertGroup(from = Default.class, to = Gruops.CozinhaId.class)
     @NotNull
@@ -54,7 +51,7 @@ public class Restaurante {
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 
-    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaDePagamento> formasDePagamento = new ArrayList<>();
@@ -63,22 +60,24 @@ public class Restaurante {
     private List<Usuario> responsaveis = new ArrayList<>();
 
     // estudar 6.4
-    @JsonIgnore
+
     @Embedded
     private Endereco endereco;
 
-    @JsonIgnore
+
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
     private LocalDateTime dataCadastro;
 
-    @JsonIgnore
+
     @UpdateTimestamp
     @Column(columnDefinition = "datetime")
     private LocalDateTime dataAtualizacao;
 
+
     @OneToMany
     private List<Produto> produtos = new ArrayList<>();
+
 
     @ManyToMany
     private List<Grupo> grupos = new ArrayList<>();
