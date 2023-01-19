@@ -7,12 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Scanner;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableJpaRepositories(repositoryBaseClass = CustonJpaRepositoryImpl.class)
 public class MarcosFoodApplication {
 
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		SpringApplication.run(MarcosFoodApplication.class, args);
 
 	}

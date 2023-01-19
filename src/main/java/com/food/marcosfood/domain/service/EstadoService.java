@@ -1,9 +1,7 @@
 package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
-import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.EstadoNaoEncotradoException;
-import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Estado;
 import com.food.marcosfood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

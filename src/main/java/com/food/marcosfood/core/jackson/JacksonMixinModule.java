@@ -1,7 +1,11 @@
 package com.food.marcosfood.core.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.food.marcosfood.domain.model.Cidade;
+import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
+import com.food.marcosfood.ipi.model.mixin.CidadeMixin;
+import com.food.marcosfood.ipi.model.mixin.CozinhaMixin;
 import com.food.marcosfood.ipi.model.mixin.RestauranteMixin;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +19,11 @@ public class JacksonMixinModule extends SimpleModule {
 
     public JacksonMixinModule(){
         setMixInAnnotation(Restaurante.class, RestauranteMixin.class);
-    }
+        setMixInAnnotation(Cidade.class, CidadeMixin.class);
+        setMixInAnnotation(Cozinha.class, CozinhaMixin.class);
+   }
+
+
 
 
 }
