@@ -8,12 +8,11 @@ import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.model.input.RestauranteInput;
 import com.food.marcosfood.domain.service.RestauranteService;
-import com.food.marcosfood.ipi.model.CozinhaDTO;
+import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
 import com.food.marcosfood.ipi.model.RestuaranteDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,6 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -29,16 +27,19 @@ public class RestauranteController {
     @Autowired
     private RestauranteService restauranteService;
 
+    @Autowired
+    private RestauranteModelAssembler restauranteModelAssembler;
+
     @GetMapping
     public List<RestuaranteDTO> buscarTodos() {
-        return toCollectionModel(restauranteService.buscarTodos());
+        return restauranteModelAssembler.toCollectionModel(restauranteService.buscarTodos());
     }
 
     @GetMapping("/{restuaranteId}")
     public RestuaranteDTO buscarPorId(@PathVariable Long restuaranteId) {
 
         Restaurante restaurante = restauranteService.buscarPorId(restuaranteId);
-        return toModell(restaurante);
+        return restauranteModelAssembler.toModell(restaurante);
     }
 
 
@@ -49,7 +50,7 @@ public class RestauranteController {
         try {
             Restaurante restaurante = toDomainObject(restauranteInput);
             Restaurante restaurante1 = restauranteService.inserir(restaurante);
-            return toModell(restaurante1);
+            return restauranteModelAssembler.toModell(restaurante1);
 
 
         } catch (RestuaranteNaoEncontadaException e) {
@@ -67,7 +68,7 @@ public class RestauranteController {
 
             Restaurante restauranteAtual = restauranteService.buscarPorId(restuarenteId);
             BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
-            return toModell(restauranteService.inserir(restauranteAtual));
+            return restauranteModelAssembler.toModell(restauranteService.inserir(restauranteAtual));
 
         } catch (RestuaranteNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
@@ -111,28 +112,6 @@ public class RestauranteController {
             ReflectionUtils.setField(field, restauranteDestino, novoValor);
         });
     }
-
-    private RestuaranteDTO toModell(Restaurante restaurante) {
-        RestuaranteDTO restuaranteDTO = new RestuaranteDTO();
-        CozinhaDTO cozinhaDTO = new CozinhaDTO();
-
-        cozinhaDTO.setId(restaurante.getCozinha().getId());
-        cozinhaDTO.setNome(restaurante.getCozinha().getNome());
-
-        restuaranteDTO.setId(restaurante.getId());
-        restuaranteDTO.setNome(restaurante.getNome());
-        restuaranteDTO.setTaxaFrete(restaurante.getTaxaFrete());
-        restuaranteDTO.setCozinhaDTO(cozinhaDTO);
-
-        return restuaranteDTO;
-
-
-    }
-
-    private List<RestuaranteDTO> toCollectionModel(List<Restaurante> restaurantes) {
-        return restaurantes.stream().map(restaurante -> toModell(restaurante)).collect(Collectors.toList());
-    }
-
 
     private Restaurante toDomainObject(RestauranteInput restauranteInput) {
         Restaurante restaurante = new Restaurante();
