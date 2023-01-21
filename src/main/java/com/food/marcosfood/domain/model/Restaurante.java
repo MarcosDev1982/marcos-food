@@ -35,19 +35,19 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+   /* @NotBlank*/
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero
+    /*@PositiveOrZero
     @TaxaFrete
-    @NotNull
+    @NotNull*/
     @Column(nullable = false)
     private BigDecimal taxaFrete;
 
-    @Valid
+   /* @Valid
     @ConvertGroup(from = Default.class, to = Gruops.CozinhaId.class)
-    @NotNull
+    @NotNull*/
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;

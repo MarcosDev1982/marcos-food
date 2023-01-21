@@ -6,7 +6,6 @@ import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.ipi.model.mixin.CidadeMixin;
 import com.food.marcosfood.ipi.model.mixin.CozinhaMixin;
-import com.food.marcosfood.ipi.model.mixin.RestauranteMixin;
 import org.springframework.stereotype.Component;
 
 

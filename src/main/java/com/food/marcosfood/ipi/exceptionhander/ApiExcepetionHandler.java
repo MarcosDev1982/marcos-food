@@ -9,6 +9,7 @@ import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -238,14 +239,14 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
 
         if (body == null) {
             body = Problema.builder()
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .title(status.getReasonPhrase())
                     .status(status.value())
                     .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
                     .build();
         } else if (body instanceof String) {
             body = Problema.builder()
-                    .timestamp(LocalDateTime.now())
+                    .timestamp(OffsetDateTime.now())
                     .title((String) body)
                     .status(status.value())
                     .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -259,7 +260,7 @@ public class ApiExcepetionHandler extends ResponseEntityExceptionHandler {
                                                           ProblemaType problemType, String detail) {
 
         return Problema.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(OffsetDateTime.now())
                 .status(status.value())
                 .type(problemType.getUri())
                 .title(problemType.getTitle())
