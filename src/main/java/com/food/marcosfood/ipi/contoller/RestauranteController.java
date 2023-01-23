@@ -10,7 +10,6 @@ import com.food.marcosfood.domain.service.RestauranteService;
 import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
 import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
 import com.food.marcosfood.ipi.model.RestauranteDTO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
@@ -51,8 +50,7 @@ public class RestauranteController {
 
         try {
             Restaurante restaurante = restauranteInputDesassembler.toDomainObject(restauranteInput);
-            return  restauranteModelAssembler.toModell(restauranteService.inserir(restaurante));
-
+            return restauranteModelAssembler.toModell(restauranteService.inserir(restaurante));
 
 
         } catch (RestuaranteNaoEncontadaException e) {
@@ -66,10 +64,9 @@ public class RestauranteController {
     public RestauranteDTO updadte(@PathVariable @Valid Long restuarenteId, @RequestBody RestauranteInput restauranteInput) {
 
         try {
-            Restaurante restaurante = restauranteInputDesassembler.toDomainObject(restauranteInput);
 
             Restaurante restauranteAtual = restauranteService.buscarPorId(restuarenteId);
-            BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+            restauranteInputDesassembler.copyToDomainObeject(restauranteInput, restauranteAtual);
             return restauranteModelAssembler.toModell(restauranteService.inserir(restauranteAtual));
 
         } catch (RestuaranteNaoEncontadaException e) {
