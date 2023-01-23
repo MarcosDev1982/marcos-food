@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
-import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.model.input.RestauranteInput;
 import com.food.marcosfood.domain.service.RestauranteService;
+import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
 import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
-import com.food.marcosfood.ipi.model.RestuaranteDTO;
+import com.food.marcosfood.ipi.model.RestauranteDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,14 +29,16 @@ public class RestauranteController {
 
     @Autowired
     private RestauranteModelAssembler restauranteModelAssembler;
+    @Autowired
+    private RestauranteInputDesassembler restauranteInputDesassembler;
 
     @GetMapping
-    public List<RestuaranteDTO> buscarTodos() {
+    public List<RestauranteDTO> buscarTodos() {
         return restauranteModelAssembler.toCollectionModel(restauranteService.buscarTodos());
     }
 
     @GetMapping("/{restuaranteId}")
-    public RestuaranteDTO buscarPorId(@PathVariable Long restuaranteId) {
+    public RestauranteDTO buscarPorId(@PathVariable Long restuaranteId) {
 
         Restaurante restaurante = restauranteService.buscarPorId(restuaranteId);
         return restauranteModelAssembler.toModell(restaurante);
@@ -45,12 +47,12 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestuaranteDTO InsereRestaurante(@RequestBody @Valid RestauranteInput restauranteInput) {
+    public RestauranteDTO InsereRestaurante(@RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
-            Restaurante restaurante = toDomainObject(restauranteInput);
-            Restaurante restaurante1 = restauranteService.inserir(restaurante);
-            return restauranteModelAssembler.toModell(restaurante1);
+            Restaurante restaurante = restauranteInputDesassembler.toDomainObject(restauranteInput);
+            return  restauranteModelAssembler.toModell(restauranteService.inserir(restaurante));
+
 
 
         } catch (RestuaranteNaoEncontadaException e) {
@@ -61,10 +63,10 @@ public class RestauranteController {
 
     // estudar a aula 6.3 na verdade revisar
     @PutMapping("/teste/{restuarenteId}")
-    public RestuaranteDTO updadte(@PathVariable @Valid Long restuarenteId, @RequestBody RestauranteInput restauranteInput) {
+    public RestauranteDTO updadte(@PathVariable @Valid Long restuarenteId, @RequestBody RestauranteInput restauranteInput) {
 
         try {
-            Restaurante restaurante = toDomainObject(restauranteInput);
+            Restaurante restaurante = restauranteInputDesassembler.toDomainObject(restauranteInput);
 
             Restaurante restauranteAtual = restauranteService.buscarPorId(restuarenteId);
             BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
@@ -111,21 +113,6 @@ public class RestauranteController {
             System.out.println(nomePropeidade + " = " + valorPropeidade + " = " + novoValor);
             ReflectionUtils.setField(field, restauranteDestino, novoValor);
         });
-    }
-
-    private Restaurante toDomainObject(RestauranteInput restauranteInput) {
-        Restaurante restaurante = new Restaurante();
-        Cozinha cozinha = new Cozinha();
-
-        restaurante.setNome(restauranteInput.getNome());
-        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
-        cozinha.setId(restauranteInput.getCozinhaIput().getId());
-
-        restaurante.setCozinha(cozinha);
-
-        return restaurante;
-
-
     }
 
 

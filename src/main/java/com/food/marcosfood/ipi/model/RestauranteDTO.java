@@ -1,20 +1,19 @@
 package com.food.marcosfood.ipi.model;
 
 
-import com.food.marcosfood.domain.model.Cozinha;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 @Setter
 @Getter
-public class RestuaranteDTO {
+public class RestauranteDTO {
 
 
     private Long id;
     private String nome;
-    private BigDecimal taxaFrete;
-    private CozinhaDTO cozinhaDTO;
+    private BigDecimal precoFrete;
+    private CozinhaDTO cozinha;
 
 
 }
