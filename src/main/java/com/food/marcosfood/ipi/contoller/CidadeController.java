@@ -1,14 +1,19 @@
 package com.food.marcosfood.ipi.contoller;
 
-import com.food.marcosfood.domain.exception.*;
+import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
+import com.food.marcosfood.domain.exception.EstadoNaoEncotradoException;
+import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Cidade;
+import com.food.marcosfood.domain.model.input.CidadeInput;
 import com.food.marcosfood.domain.service.CidadeService;
-import org.springframework.beans.BeanUtils;
+import com.food.marcosfood.ipi.assembler.CidadeModelAssembler;
+import com.food.marcosfood.ipi.assembler.CidadeModelDesAssembler;
+import com.food.marcosfood.ipi.model.CidadeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,18 +21,25 @@ import java.util.List;
 public class CidadeController {
 
     @Autowired
-    CidadeService cidadeService;
+    private CidadeService cidadeService;
+
+    @Autowired
+    private CidadeModelAssembler cidadeModelAssembler;
+
+    @Autowired
+    private CidadeModelDesAssembler cidadeModelDesAssembler;
 
     @GetMapping
-    public ResponseEntity<List<Cidade>> findAll() {
+    public List<CidadeDTO> findAll() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(cidadeService.findAllCidade());
+        return cidadeModelAssembler.toCollectionModel(cidadeService.findAllCidade());
     }
 
     @GetMapping("/{cidadeId}")
-    public Cidade findAllById(@PathVariable Long cidadeId) {
+    public CidadeDTO findAllById(@PathVariable Long cidadeId) {
         try {
-            return cidadeService.findByIdCidade(cidadeId);
+
+            return cidadeModelAssembler.toModell(cidadeService.findByIdCidade(cidadeId));
 
         } catch (CozinhaNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
@@ -37,9 +49,10 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade create(@RequestBody Cidade cidade) {
+    public CidadeDTO create(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
-            return cidadeService.cadastraCidade(cidade);
+            Cidade cidade = cidadeModelDesAssembler.toDomainObejct(cidadeInput);
+            return cidadeModelAssembler.toModell(cidadeService.cadastraCidade(cidade));
         } catch (EstadoNaoEncotradoException e) {
 
             throw new NegocioExcepetion(e.getMessage(), e);
@@ -49,12 +62,12 @@ public class CidadeController {
     }
 
     @PutMapping("/{cidadeId}")
-    public Cidade alterCidade(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+    public CidadeDTO alterCidade(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 
 
         Cidade cidadeAtual = cidadeService.findByIdCidade(cidadeId);
-        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-        return cidadeService.cadastraCidade(cidadeAtual);
+        cidadeModelDesAssembler.copyToDomainObeject(cidadeInput, cidadeAtual);
+        return cidadeModelAssembler.toModell(cidadeService.cadastraCidade(cidadeAtual));
 
 
     }

@@ -61,7 +61,7 @@ public class RestauranteController {
 
     // estudar a aula 6.3 na verdade revisar
     @PutMapping("/teste/{restuarenteId}")
-    public RestauranteDTO updadte(@PathVariable @Valid Long restuarenteId, @RequestBody RestauranteInput restauranteInput) {
+    public RestauranteDTO updadte(@PathVariable @Valid Long restuarenteId, @RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
 
