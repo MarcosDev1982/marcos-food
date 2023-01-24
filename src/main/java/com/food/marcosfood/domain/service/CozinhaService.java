@@ -51,6 +51,7 @@ public class CozinhaService {
     public void deleta(Long cozinhaId) {
         try {
             cozinhaRepository.deleteById(cozinhaId);
+            cozinhaRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new CozinhaNaoEncontadaException(cozinhaId);
         } catch (DataIntegrityViolationException e) {

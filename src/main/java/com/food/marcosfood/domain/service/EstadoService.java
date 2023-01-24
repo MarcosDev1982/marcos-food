@@ -39,7 +39,7 @@ public class EstadoService {
         try {
 
             estadoRepository.deleteById(estadoId);
-
+            estadoRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new EstadoNaoEncotradoException(estadoId);
         } catch (DataIntegrityViolationException e) {

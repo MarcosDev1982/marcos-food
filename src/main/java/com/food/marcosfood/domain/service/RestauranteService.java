@@ -1,11 +1,9 @@
 package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
-import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
-import com.food.marcosfood.domain.repository.CozinhaRepository;
 import com.food.marcosfood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -68,7 +66,7 @@ public class RestauranteService {
         try {
 
             restauranteRepository.deleteById(restuaranteId);
-
+            restauranteRepository.flush();
         } catch (EmptyResultDataAccessException e) {
             throw new RestuaranteNaoEncontadaException(restuaranteId);
 
