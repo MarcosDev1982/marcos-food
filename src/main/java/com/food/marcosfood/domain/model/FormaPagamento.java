@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-public class FormaDePagamento {
+public class FormaPagamento {
 
     @EqualsAndHashCode.Include
     @Id

@@ -2,6 +2,7 @@ package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
+import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.repository.RestauranteRepository;
@@ -22,6 +23,9 @@ public class RestauranteService {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private CidadeService cidadeService;
 
     @Autowired
     private CozinhaService cozinhaService;
@@ -47,8 +51,10 @@ public class RestauranteService {
 
         Long cozinhdaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaService.buscarPorId(cozinhdaId);
-
+        Long cidadeId = restaurante.getEndereco().getCidade().getId();
+        Cidade cidade = cidadeService.findByIdCidade(cidadeId);
         restaurante.setCozinha(cozinha);
+        restaurante.getEndereco().setCidade(cidade);
         return restauranteRepository.save(restaurante);
 
     }
@@ -75,5 +81,18 @@ public class RestauranteService {
         }
     }
 
+    @Transactional
+    public void ativar(Long restauranteId) {
+        Restaurante restuaranteAtual = buscarPorId(restauranteId);
+        restuaranteAtual.ativar();
+
+
+    }
+
+    @Transactional
+    public void inativar(Long restauranteId) {
+        Restaurante restuaranteAtual = buscarPorId(restauranteId);
+        restuaranteAtual.inativar();
+    }
 
 }

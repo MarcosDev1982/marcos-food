@@ -1,5 +1,6 @@
 package com.food.marcosfood.ipi.assembler;
 
+import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.model.input.RestauranteInput;
@@ -23,6 +24,11 @@ public class RestauranteInputDesassembler {
         //para evitar org.hibernate.HibernateException: identifier of an instance of
         //com.food.marcosfood.domain.model.Cozinha was altered from 1 to 2
         restaurante.setCozinha(new Cozinha());
+
+        if(restaurante.getEndereco() != null){
+            restaurante.getEndereco().setCidade(new Cidade());
+        }
+
         modelMapper.map(restauranteInput, restaurante);
 
     }

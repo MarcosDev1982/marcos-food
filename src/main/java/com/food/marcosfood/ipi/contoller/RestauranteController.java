@@ -1,9 +1,9 @@
 package com.food.marcosfood.ipi.contoller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.food.marcosfood.domain.exception.CidadeNaoEncontadaException;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
-import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.model.input.RestauranteInput;
 import com.food.marcosfood.domain.service.RestauranteService;
@@ -53,7 +53,7 @@ public class RestauranteController {
             return restauranteModelAssembler.toModell(restauranteService.inserir(restaurante));
 
 
-        } catch (RestuaranteNaoEncontadaException e) {
+        } catch (CozinhaNaoEncontadaException | CidadeNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage());
         }
 
@@ -69,13 +69,28 @@ public class RestauranteController {
             restauranteInputDesassembler.copyToDomainObeject(restauranteInput, restauranteAtual);
             return restauranteModelAssembler.toModell(restauranteService.inserir(restauranteAtual));
 
-        } catch (RestuaranteNaoEncontadaException e) {
-            throw new NegocioExcepetion(e.getMessage(), e);
-        } catch (CozinhaNaoEncontadaException e) {
+        } catch (CidadeNaoEncontadaException | CozinhaNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
         }
 
     }
+
+    @PutMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long restauranteId) {
+
+        restauranteService.ativar(restauranteId);
+
+    }
+
+    @DeleteMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable Long restauranteId) {
+
+        restauranteService.inativar(restauranteId);
+
+    }
+
 
     @DeleteMapping("/{restauranteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -84,6 +99,8 @@ public class RestauranteController {
         restauranteService.delete(restauranteId);
 
     }
+
+
 
    /* @PatchMapping("/{restauranteId}")
     public RestuaranteDTO alterarParcial(@PathVariable Long restauranteId, @RequestBody Map<String, Object> campos) {

@@ -1,9 +1,7 @@
 package com.food.marcosfood.ipi.assembler;
 
 import com.food.marcosfood.domain.model.Cidade;
-import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.ipi.model.CidadeDTO;
-import com.food.marcosfood.ipi.model.RestauranteDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

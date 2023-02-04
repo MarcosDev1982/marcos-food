@@ -43,7 +43,7 @@ public class Pedido {
     private StatusPedido statusPedido;
 
     @ManyToOne
-    private FormaDePagamento formaDePagamento;
+    private FormaPagamento formaDePagamento;
 
     @OneToOne
     private Restaurante restaurante;
