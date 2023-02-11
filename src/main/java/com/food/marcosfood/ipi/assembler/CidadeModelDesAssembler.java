@@ -2,7 +2,7 @@ package com.food.marcosfood.ipi.assembler;
 
 import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.model.Estado;
-import com.food.marcosfood.domain.model.input.CidadeInput;
+import com.food.marcosfood.ipi.model.input.CidadeInput;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

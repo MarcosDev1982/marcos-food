@@ -4,7 +4,7 @@ import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Cozinha;
-import com.food.marcosfood.domain.model.input.CozinhaInput;
+import com.food.marcosfood.ipi.model.input.CozinhaInput;
 import com.food.marcosfood.domain.service.CozinhaService;
 import com.food.marcosfood.ipi.assembler.CozinhaModelAssembler;
 import com.food.marcosfood.ipi.assembler.CozinhaModelDesAssembler;

@@ -3,7 +3,7 @@ package com.food.marcosfood.ipi.assembler;
 import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.model.Cozinha;
 import com.food.marcosfood.domain.model.Restaurante;
-import com.food.marcosfood.domain.model.input.RestauranteInput;
+import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

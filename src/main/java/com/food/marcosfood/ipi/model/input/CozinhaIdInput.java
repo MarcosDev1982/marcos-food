@@ -1,13 +1,14 @@
-package com.food.marcosfood.domain.model.input;
+package com.food.marcosfood.ipi.model.input;
+
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-@Getter
 @Setter
-public class EstadoInput {
+@Getter
+public class CozinhaIdInput {
 
     @NotNull
     private Long id;

@@ -3,7 +3,7 @@ package com.food.marcosfood.ipi.contoller;
 import com.food.marcosfood.domain.exception.FormaPagementoNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.FormaPagamento;
-import com.food.marcosfood.domain.model.input.FormaPagamentoInput;
+import com.food.marcosfood.ipi.model.input.FormaPagamentoInput;
 import com.food.marcosfood.domain.service.FormadePagmentoService;
 import com.food.marcosfood.ipi.assembler.FormaDePamentoDesassembler;
 import com.food.marcosfood.ipi.assembler.FormaPagamentoAssembler;

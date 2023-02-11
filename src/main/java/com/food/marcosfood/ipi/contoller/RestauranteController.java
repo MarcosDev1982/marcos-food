@@ -5,7 +5,7 @@ import com.food.marcosfood.domain.exception.CidadeNaoEncontadaException;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Restaurante;
-import com.food.marcosfood.domain.model.input.RestauranteInput;
+import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import com.food.marcosfood.domain.service.RestauranteService;
 import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
 import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;

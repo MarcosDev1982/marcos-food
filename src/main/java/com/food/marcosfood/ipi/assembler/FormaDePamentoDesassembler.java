@@ -2,7 +2,7 @@ package com.food.marcosfood.ipi.assembler;
 
 
 import com.food.marcosfood.domain.model.FormaPagamento;
-import com.food.marcosfood.domain.model.input.FormaPagamentoInput;
+import com.food.marcosfood.ipi.model.input.FormaPagamentoInput;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

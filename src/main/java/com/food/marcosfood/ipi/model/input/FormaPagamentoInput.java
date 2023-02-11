@@ -1,4 +1,4 @@
-package com.food.marcosfood.domain.model.input;
+package com.food.marcosfood.ipi.model.input;
 
 import lombok.Getter;
 import lombok.Setter;
