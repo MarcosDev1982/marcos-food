@@ -11,7 +11,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -44,7 +46,7 @@ public class Restaurante {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-    private List<FormaPagamento> formasDePagamento = new ArrayList<>();
+    private Set<FormaPagamento> formasDePagamento = new HashSet<>();
 
     @OneToMany
     private List<Usuario> responsaveis = new ArrayList<>();
@@ -82,5 +84,13 @@ public class Restaurante {
         setAtivo(false);
     }
 
+    public boolean removerFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasDePagamento().remove(formaPagamento);
 
+    }
+
+
+    public boolean adcionarFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasDePagamento().add(formaPagamento);
+    }
 }

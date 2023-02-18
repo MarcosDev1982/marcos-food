@@ -4,6 +4,7 @@ import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.model.Cozinha;
+import com.food.marcosfood.domain.model.FormaPagamento;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class RestauranteService {
 
     @Autowired
     private CozinhaService cozinhaService;
+
+    @Autowired
+    private FormadePagmentoService FormadePagmentoService;
 
     public List<Restaurante> buscarTodos() {
 
@@ -94,5 +98,22 @@ public class RestauranteService {
         Restaurante restuaranteAtual = buscarPorId(restauranteId);
         restuaranteAtual.inativar();
     }
+
+    @Transactional
+    public void desassociaFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        FormaPagamento formaPagamento = FormadePagmentoService.findById(formaPagamentoId);
+        restaurante.removerFormaPagamento(formaPagamento);
+
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        FormaPagamento formaPagamento = FormadePagmentoService.findById(formaPagamentoId);
+        restaurante.adcionarFormaPagamento(formaPagamento);
+
+    }
+
 
 }
