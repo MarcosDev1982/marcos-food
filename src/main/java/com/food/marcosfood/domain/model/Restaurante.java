@@ -58,6 +58,8 @@ public class Restaurante {
 
     private Boolean ativo = Boolean.TRUE;
 
+    private  Boolean aberto = Boolean.TRUE;
+
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
@@ -93,4 +95,14 @@ public class Restaurante {
     public boolean adcionarFormaPagamento(FormaPagamento formaPagamento) {
         return getFormasDePagamento().add(formaPagamento);
     }
+
+    public void abrir(){
+        setAberto(true);
+    }
+
+    public void fefhar(){
+        setAberto(false);
+    }
+
+
 }

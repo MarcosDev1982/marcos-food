@@ -20,6 +20,7 @@ public class RestauranteDTO {
     private EnderecoDTO endereco;
     private List<FormaPagementoDTO> formaPagamento = new ArrayList<>();
     private boolean ativo;
+    private  boolean aberto;
 
 
 }

@@ -115,5 +115,15 @@ public class RestauranteService {
 
     }
 
+    @Transactional
+    public void abrir(Long restauranteId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        restaurante.abrir();
+    }
 
+    @Transactional
+    public void fechar(Long restauranteId) {
+        Restaurante restaurante = buscarPorId(restauranteId);
+        restaurante.fefhar();
+    }
 }

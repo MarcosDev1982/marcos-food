@@ -5,11 +5,11 @@ import com.food.marcosfood.domain.exception.CidadeNaoEncontadaException;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Restaurante;
-import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import com.food.marcosfood.domain.service.RestauranteService;
 import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
 import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
 import com.food.marcosfood.ipi.model.RestauranteDTO;
+import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
@@ -91,6 +91,22 @@ public class RestauranteController {
 
     }
 
+    @PutMapping("/{restauranteId}/abrir")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrir(@PathVariable Long restauranteId) {
+
+        restauranteService.abrir(restauranteId);
+
+    }
+
+    @DeleteMapping("/{restauranteId}/fechar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void fechar(@PathVariable Long restauranteId) {
+
+        restauranteService.fechar(restauranteId);
+
+    }
+
 
     @DeleteMapping("/{restauranteId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -99,6 +115,8 @@ public class RestauranteController {
         restauranteService.delete(restauranteId);
 
     }
+
+
 
 
 
