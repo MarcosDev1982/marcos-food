@@ -33,7 +33,7 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> buscarTodos() {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.collectionModell(usuarioService.buscarTodos()));
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toCollectionModel(usuarioService.buscarTodos()));
     }
 
     @GetMapping("/{usuarioId}")

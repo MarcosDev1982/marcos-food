@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CadastroCozinhaControllerIT {
+public class                                                                                    CadastroCozinhaControllerIT {
 
     @LocalServerPort
     private int port;

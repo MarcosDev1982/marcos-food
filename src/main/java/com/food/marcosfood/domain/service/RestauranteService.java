@@ -2,10 +2,7 @@ package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
-import com.food.marcosfood.domain.model.Cidade;
-import com.food.marcosfood.domain.model.Cozinha;
-import com.food.marcosfood.domain.model.FormaPagamento;
-import com.food.marcosfood.domain.model.Restaurante;
+import com.food.marcosfood.domain.model.*;
 import com.food.marcosfood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,6 +30,10 @@ public class RestauranteService {
 
     @Autowired
     private FormadePagmentoService FormadePagmentoService;
+
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public List<Restaurante> buscarTodos() {
 
@@ -125,5 +126,17 @@ public class RestauranteService {
     public void fechar(Long restauranteId) {
         Restaurante restaurante = buscarPorId(restauranteId);
         restaurante.fefhar();
+    }
+
+    public void asscociarUsuario(Long restuarnteId, Long usuarioId) {
+      Restaurante restaurante = buscarPorId(restuarnteId);
+      Usuario usuario =  usuarioService.buscarPorId(usuarioId);
+      restaurante.adicionarResponsavel(usuario);
+    }
+
+    public void desasscociarUsuario(Long restuarnteId, Long usuarioId) {
+        Restaurante restaurante = buscarPorId(restuarnteId);
+        Usuario usuario =  usuarioService.buscarPorId(usuarioId);
+        restaurante.removerResponsavel(usuario);
     }
 }

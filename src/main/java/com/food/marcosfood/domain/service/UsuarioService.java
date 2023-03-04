@@ -4,6 +4,7 @@ package com.food.marcosfood.domain.service;
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.exception.UsuarioNaoEncontadoException;
+import com.food.marcosfood.domain.model.Grupo;
 import com.food.marcosfood.domain.model.Usuario;
 import com.food.marcosfood.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     @Autowired
     private EntityManager entityManager;
@@ -73,6 +77,18 @@ public class UsuarioService {
         }
 
         usuario.setSenha(novaSenha);
+    }
+
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarPorId(grupoId);
+        usuario.adicionarGrupo(grupo);
+    }
+
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarPorId(grupoId);
+        usuario.removerGrupo(grupo);
     }
 
 }
