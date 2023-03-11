@@ -1,7 +1,7 @@
 package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.exception.EntidadeEmUsoException;
-import com.food.marcosfood.domain.exception.RestuaranteNaoEncontadaException;
+import com.food.marcosfood.domain.exception.RestauranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.*;
 import com.food.marcosfood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class RestauranteService {
 
 
         return restauranteRepository.findById(retuaranteId).orElseThrow(
-                () -> new RestuaranteNaoEncontadaException(retuaranteId));
+                () -> new RestauranteNaoEncontadaException(retuaranteId));
 
 
     }
@@ -66,7 +66,7 @@ public class RestauranteService {
 
     public Restaurante updadte(Long restauranteId, Restaurante restaurante) {
         if (!restauranteRepository.existsById(restauranteId)) {
-            throw new RestuaranteNaoEncontadaException(restauranteId);
+            throw new RestauranteNaoEncontadaException(restauranteId);
         }
         restaurante.setId(restauranteId);
         return restauranteRepository.save(restaurante);
@@ -79,7 +79,7 @@ public class RestauranteService {
             restauranteRepository.deleteById(restuaranteId);
             restauranteRepository.flush();
         } catch (EmptyResultDataAccessException e) {
-            throw new RestuaranteNaoEncontadaException(restuaranteId);
+            throw new RestauranteNaoEncontadaException(restuaranteId);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(ESTADO_DE_CODIGO_NAO_PODE_SER_REMOVIDA_POIS_ESTA_EM_USO, restuaranteId));
@@ -129,14 +129,26 @@ public class RestauranteService {
     }
 
     public void asscociarUsuario(Long restuarnteId, Long usuarioId) {
-      Restaurante restaurante = buscarPorId(restuarnteId);
-      Usuario usuario =  usuarioService.buscarPorId(usuarioId);
-      restaurante.adicionarResponsavel(usuario);
+        Restaurante restaurante = buscarPorId(restuarnteId);
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+        restaurante.adicionarResponsavel(usuario);
     }
 
     public void desasscociarUsuario(Long restuarnteId, Long usuarioId) {
         Restaurante restaurante = buscarPorId(restuarnteId);
-        Usuario usuario =  usuarioService.buscarPorId(usuarioId);
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
         restaurante.removerResponsavel(usuario);
     }
+
+    @Transactional
+    public void ativar(List<Long> restuarnteIds) {
+        restuarnteIds.forEach(this::ativar);
+    }
+
+    @Transactional
+    public void inativar(List<Long> restuarnteIds) {
+        restuarnteIds.forEach(this::inativar);
+    }
+
+
 }

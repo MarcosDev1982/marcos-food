@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.marcosfood.domain.exception.CidadeNaoEncontadaException;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
+import com.food.marcosfood.domain.exception.RestauranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.service.RestauranteService;
 import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
@@ -113,6 +114,28 @@ public class RestauranteController {
     public void delete(@PathVariable Long restauranteId) {
 
         restauranteService.delete(restauranteId);
+
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void AtivarMultiplos(@RequestBody List<Long> restaurantesId) {
+       try {
+           restauranteService.ativar(restaurantesId);
+       }catch (RestauranteNaoEncontadaException e){
+           throw new NegocioExcepetion(e.getMessage(), e);
+       }
+
+    }
+
+    @DeleteMapping("/inativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void inativarMultiplos(@RequestBody List<Long> restaurantesId) {
+      try {
+          restauranteService.inativar(restaurantesId);
+      }catch (RestauranteNaoEncontadaException e){
+          throw new NegocioExcepetion(e.getMessage(), e);
+      }
 
     }
 
