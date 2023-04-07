@@ -25,5 +25,7 @@ public class PedidoService {
     }
 
 
-
+    public Pedido cadastraPedido(Pedido pedido) {
+        return pedidoRepository.save(pedido);
+    }
 }

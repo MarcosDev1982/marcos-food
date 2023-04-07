@@ -1,7 +1,9 @@
 package com.food.marcosfood.core.modelMapper;
 
 import com.food.marcosfood.domain.model.Endereco;
+import com.food.marcosfood.domain.model.ItemPedido;
 import com.food.marcosfood.ipi.model.EnderecoDTO;
+import com.food.marcosfood.ipi.model.input.ItemPedidoInput;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,11 @@ public class ModelMapperConfig {
         var modelMapper = new ModelMapper();
        /*modelMapper.createTypeMap(Restaurante.class, RestauranteDTO.class)
                .addMapping(Restaurante::getTaxaFrete, RestauranteDTO::setPrecoFrete);*/
+
+
+        modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
+                .addMappings(mapper -> mapper.skip(ItemPedido::setId));
+
         var enderecoToModelTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoDTO.class);
         enderecoToModelTypeMap.<String>addMapping(
                 src -> src.getCidade().getEstado().getNome(),
