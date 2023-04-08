@@ -1,6 +1,7 @@
 package com.food.marcosfood.domain.model;
 
 import com.food.marcosfood.domain.enumeration.StatusPedido;
+import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,6 +77,28 @@ public class Pedido {
 
     public void atribuirPedidoAosItens() {
         getItens().forEach(item -> item.setPedido(this));
+    }
+
+    public void confirma() {
+        setStatus(StatusPedido.CONFIRMADO);
+        setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    public void entregar() {
+        setStatus(StatusPedido.ENTREGE);
+        setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar() {
+        setStatus(StatusPedido.CANCELADO);
+        setDataCancelamento(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido novoStatus) {
+        if (getStatus().naoPodeAlteraPara(novoStatus)) {
+            throw new NegocioExcepetion(String.format("Status do pedido %d não pode Ser Altrerado de %s para %s", getId(), getStatus().getDescricao(), novoStatus.getDescricao()));
+        }
+        this.status = novoStatus;
     }
 
 
