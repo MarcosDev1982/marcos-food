@@ -39,9 +39,9 @@ public class PedidoController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{pedidoId}")
-    public PedidoDTO buscaPedidoPorId(@PathVariable Long pedidoId) {
-        Pedido pedido = pedidoService.buscarPorId(pedidoId);
+    @GetMapping("/{codigoPedido}")
+    public PedidoDTO buscaPedidoPorId(@PathVariable String codigoPedido) {
+        Pedido pedido = pedidoService.buscarPorId(codigoPedido);
         return pedidoAssembler.toDto(pedido);
     }
 
