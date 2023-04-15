@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -101,6 +102,10 @@ public class Pedido {
             throw new NegocioExcepetion(String.format("Status do pedido %s não pode Ser Altrerado de %s para %s", getCodigo(), getStatus().getDescricao(), novoStatus.getDescricao()));
         }
         this.status = novoStatus;
+    }
+    @PrePersist
+    private void gerarCodigo(){
+        setCodigo(UUID.randomUUID().toString());
     }
 
 

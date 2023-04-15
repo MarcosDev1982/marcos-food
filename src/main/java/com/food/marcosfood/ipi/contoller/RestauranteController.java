@@ -1,5 +1,6 @@
 package com.food.marcosfood.ipi.contoller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.marcosfood.domain.exception.CidadeNaoEncontadaException;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
@@ -11,8 +12,10 @@ import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
 import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
 import com.food.marcosfood.ipi.model.RestauranteDTO;
 import com.food.marcosfood.ipi.model.input.RestauranteInput;
+import com.food.marcosfood.ipi.model.view.RestauranteView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +35,34 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputDesassembler restauranteInputDesassembler;
 
+
+ /*   @GetMapping
+    public MappingJacksonValue buscarTodos(@RequestParam(required = false) String projecao) {
+        List<Restaurante> restaurantes = restauranteService.buscarTodos();
+        List<RestauranteDTO> restaurantesmodel = restauranteModelAssembler.toCollectionModel(restaurantes);
+        MappingJacksonValue restauranteVwrapper = new MappingJacksonValue(restaurantesmodel);
+
+        restauranteVwrapper.setSerializationView(RestauranteView.Resumo.class);
+
+        if ("apenas-nome".equals(projecao)) {
+            restauranteVwrapper.setSerializationView(RestauranteView.ApenasNome.class);
+        } else if ("completo".equals(projecao)) {
+            restauranteVwrapper.setSerializationView(null);
+        }
+
+        return restauranteVwrapper;
+    }*/
+
+    @JsonView(RestauranteView.Resumo.class)
     @GetMapping
     public List<RestauranteDTO> buscarTodos() {
-        return restauranteModelAssembler.toCollectionModel(restauranteService.buscarTodos());
+       return restauranteModelAssembler.toCollectionModel(restauranteService.buscarTodos());
+    }
+
+    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome")
+    public List<RestauranteDTO> listarApenasNome() {
+        return buscarTodos();
     }
 
     @GetMapping("/{restuaranteId}")
@@ -120,22 +148,22 @@ public class RestauranteController {
     @PutMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void AtivarMultiplos(@RequestBody List<Long> restaurantesId) {
-       try {
-           restauranteService.ativar(restaurantesId);
-       }catch (RestauranteNaoEncontadaException e){
-           throw new NegocioExcepetion(e.getMessage(), e);
-       }
+        try {
+            restauranteService.ativar(restaurantesId);
+        } catch (RestauranteNaoEncontadaException e) {
+            throw new NegocioExcepetion(e.getMessage(), e);
+        }
 
     }
 
     @DeleteMapping("/inativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void inativarMultiplos(@RequestBody List<Long> restaurantesId) {
-      try {
-          restauranteService.inativar(restaurantesId);
-      }catch (RestauranteNaoEncontadaException e){
-          throw new NegocioExcepetion(e.getMessage(), e);
-      }
+        try {
+            restauranteService.inativar(restaurantesId);
+        } catch (RestauranteNaoEncontadaException e) {
+            throw new NegocioExcepetion(e.getMessage(), e);
+        }
 
     }
 
