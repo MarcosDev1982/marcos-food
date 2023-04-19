@@ -8,6 +8,9 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @Configuration
 public class SquigglyConfig {
 
@@ -16,9 +19,11 @@ public class SquigglyConfig {
 
         Squiggly.init(objectMapper, new RequestSquigglyContextProvider());
 
+        var  urlPatterns = Arrays.asList("/pedidos", "/restuarante");
         var filterRegistration = new FilterRegistrationBean<SquigglyRequestFilter>();
         filterRegistration.setFilter(new SquigglyRequestFilter());
         filterRegistration.setOrder(1);
+        filterRegistration.setUrlPatterns(urlPatterns);
 
         return filterRegistration;
     }

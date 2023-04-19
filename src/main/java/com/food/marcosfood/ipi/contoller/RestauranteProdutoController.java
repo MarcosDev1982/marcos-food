@@ -37,12 +37,17 @@ public class RestauranteProdutoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProdutoDTO> buscarTodos(@PathVariable Long restauranteId) {
+    public List<ProdutoDTO> buscarTodos(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativo) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
+        List<Produto> todosProdutos= null;
 
-        List<Produto> todosProdutos = produtoRepository.findByRestaurante(restaurante);
+        if (incluirInativo){
+          produtoRepository.findByRestaurante(restaurante);
+        }else{
+            todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
+        }
 
-        return produtoAssembler.toCollectionModel(todosProdutos);
+         return produtoAssembler.toCollectionModel(todosProdutos);
     }
 
     @PostMapping

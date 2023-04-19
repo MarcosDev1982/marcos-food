@@ -3,7 +3,10 @@ package com.food.marcosfood.ipi.contoller;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.food.marcosfood.domain.model.Pedido;
+import com.food.marcosfood.domain.repository.PedidoRepository;
+import com.food.marcosfood.domain.repository.filter.PedidoFilter;
 import com.food.marcosfood.domain.service.PedidoService;
+import com.food.marcosfood.infrastructure.respository.spec.PedidoSpecs;
 import com.food.marcosfood.ipi.assembler.PedidoAssembler;
 import com.food.marcosfood.ipi.assembler.PedidoInputDesassembler;
 import com.food.marcosfood.ipi.assembler.PedidoResumoAssembler;
@@ -31,10 +34,13 @@ public class PedidoController {
     @Autowired
     private PedidoInputDesassembler pedidoInputDesassembler;
 
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
      @ResponseStatus(HttpStatus.OK)
      @GetMapping
-     public List<PedidoResumoDTO> buscaTodos() {
-         List<Pedido> pedidoList = pedidoService.pedidoList();
+     public List<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter) {
+         List<Pedido> pedidoList = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter));
          return pedidoResumoAssembler.toCollectonDto(pedidoList);
      }
 /*    @ResponseStatus(HttpStatus.OK)
