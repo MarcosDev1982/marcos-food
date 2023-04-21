@@ -9,6 +9,8 @@ import org.hibernate.engine.spi.ManagedEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +32,8 @@ public class CozinhaService {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-    public List<Cozinha> list() {
-        return cozinhaRepository.findAll();
+    public Page<Cozinha> list(Pageable pageable) {
+        return cozinhaRepository.findAll(pageable);
     }
 
     public Cozinha buscarPorId(Long cozinhaId) {

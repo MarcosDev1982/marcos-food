@@ -4,12 +4,16 @@ import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Cozinha;
-import com.food.marcosfood.ipi.model.input.CozinhaInput;
 import com.food.marcosfood.domain.service.CozinhaService;
 import com.food.marcosfood.ipi.assembler.CozinhaModelAssembler;
 import com.food.marcosfood.ipi.assembler.CozinhaModelDesAssembler;
 import com.food.marcosfood.ipi.model.CozinhaDTO;
+import com.food.marcosfood.ipi.model.input.CozinhaInput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +33,11 @@ public class CozinhaController {
     private CozinhaModelAssembler cozinhaModelAssembler;
 
     @GetMapping("/cozinhas")
-    private List<CozinhaDTO> listar() {
-        return cozinhaModelAssembler.toCollectionModel(cozinhaService.list());
+    private Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
+        Page<Cozinha> cozinhaPage = cozinhaService.list(pageable);
+        List<CozinhaDTO> cozinhaDTOList = cozinhaModelAssembler.toCollectionModel(cozinhaPage.getContent());
+        Page<CozinhaDTO> cozinhaDTOPage = new PageImpl<>(cozinhaDTOList, pageable, cozinhaPage.getTotalElements());
+        return cozinhaDTOPage;
     }
 
     @GetMapping("/{cozinhaId}")
