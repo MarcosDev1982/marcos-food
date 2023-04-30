@@ -1,7 +1,5 @@
 package com.food.marcosfood.ipi.contoller;
 
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.food.marcosfood.domain.model.Pedido;
 import com.food.marcosfood.domain.repository.PedidoRepository;
 import com.food.marcosfood.domain.repository.filter.PedidoFilter;
@@ -13,10 +11,12 @@ import com.food.marcosfood.ipi.assembler.PedidoResumoAssembler;
 import com.food.marcosfood.ipi.model.PedidoDTO;
 import com.food.marcosfood.ipi.model.PedidoResumoDTO;
 import com.food.marcosfood.ipi.model.input.PedidoInput;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,12 +37,14 @@ public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-     @ResponseStatus(HttpStatus.OK)
-     @GetMapping
-     public List<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter) {
-         List<Pedido> pedidoList = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter));
-         return pedidoResumoAssembler.toCollectonDto(pedidoList);
-     }
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public Page<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size = 10) Pageable pageable) {
+        Page<Pedido> pedidoPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
+        List<PedidoResumoDTO> pedidoResumoDTOList = pedidoResumoAssembler.toCollectonDto(pedidoPage.getContent());
+        Page<PedidoResumoDTO> pedidoResumoDTOPage = new PageImpl<>(pedidoResumoDTOList, pageable, pedidoPage.getTotalElements());
+        return pedidoResumoDTOPage;
+    }
 /*    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public MappingJacksonValue buscaTodos(@RequestParam(required = false) String campos) {
