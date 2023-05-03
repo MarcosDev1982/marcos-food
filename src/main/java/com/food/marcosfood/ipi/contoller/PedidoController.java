@@ -1,5 +1,6 @@
 package com.food.marcosfood.ipi.contoller;
 
+import com.food.marcosfood.core.data.PageableTranslator;
 import com.food.marcosfood.domain.model.Pedido;
 import com.food.marcosfood.domain.repository.PedidoRepository;
 import com.food.marcosfood.domain.repository.filter.PedidoFilter;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -40,6 +42,7 @@ public class PedidoController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size = 10) Pageable pageable) {
+        pageable = traduzirPageable(pageable);
         Page<Pedido> pedidoPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(pedidoFilter), pageable);
         List<PedidoResumoDTO> pedidoResumoDTOList = pedidoResumoAssembler.toCollectonDto(pedidoPage.getContent());
         Page<PedidoResumoDTO> pedidoResumoDTOPage = new PageImpl<>(pedidoResumoDTOList, pageable, pedidoPage.getTotalElements());
@@ -84,6 +87,17 @@ public class PedidoController {
         }
 
     }
+
+    private Pageable traduzirPageable(Pageable pageable) {
+        var mapeamento = Map.of(
+                "codigo", "codigo",
+                "restauranteNome", "restaurante.nome",
+                "valorTotal", "valorTotal",
+                "nomeCliente", "cliente.nome"
+        );
+        return PageableTranslator.translate(pageable, mapeamento);
+    }
+
 
 
 }
