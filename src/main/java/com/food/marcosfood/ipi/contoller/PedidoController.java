@@ -3,7 +3,7 @@ package com.food.marcosfood.ipi.contoller;
 import com.food.marcosfood.core.data.PageableTranslator;
 import com.food.marcosfood.domain.model.Pedido;
 import com.food.marcosfood.domain.repository.PedidoRepository;
-import com.food.marcosfood.domain.repository.filter.PedidoFilter;
+import com.food.marcosfood.domain.fiter.PedidoFilter;
 import com.food.marcosfood.domain.service.PedidoService;
 import com.food.marcosfood.infrastructure.respository.spec.PedidoSpecs;
 import com.food.marcosfood.ipi.assembler.PedidoAssembler;

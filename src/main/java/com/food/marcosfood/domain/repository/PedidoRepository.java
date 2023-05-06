@@ -1,6 +1,8 @@
 package com.food.marcosfood.domain.repository;
 
+import com.food.marcosfood.domain.fiter.VendasDiariasFilter;
 import com.food.marcosfood.domain.model.Pedido;
+import com.food.marcosfood.ipi.model.VendaDiaria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,5 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecif
     List<Pedido> findAll();
 
     Optional<Pedido> findByCodigo(String codigo);
-
 
 }

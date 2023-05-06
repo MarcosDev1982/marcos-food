@@ -1,7 +1,7 @@
 package com.food.marcosfood.infrastructure.respository.spec;
 
 import com.food.marcosfood.domain.model.Pedido;
-import com.food.marcosfood.domain.repository.filter.PedidoFilter;
+import com.food.marcosfood.domain.fiter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
