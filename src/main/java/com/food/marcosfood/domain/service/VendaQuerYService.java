@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 public interface VendaQuerYService {
 
-    List<VendaDiaria> consultarVendasDiarias(VendasDiariasFilter filter);
+    List<VendaDiaria> consultarVendasDiarias(VendasDiariasFilter filter, String timeOffset);
 
 }
