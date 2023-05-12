@@ -1,4 +1,4 @@
-package com.food.marcosfood.infrastructure.service;
+package com.food.marcosfood.infrastructure.service.query;
 
 import com.food.marcosfood.domain.fiter.VendasDiariasFilter;
 import com.food.marcosfood.domain.model.Pedido;
