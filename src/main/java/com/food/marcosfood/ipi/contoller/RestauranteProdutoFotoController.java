@@ -1,14 +1,19 @@
 package com.food.marcosfood.ipi.contoller;
 
-import java.nio.file.Path;
-import java.util.UUID;
-
+import com.food.marcosfood.domain.model.FotoProduto;
+import com.food.marcosfood.domain.model.Produto;
+import com.food.marcosfood.domain.service.CatalagoFotoProdutoService;
+import com.food.marcosfood.domain.service.ProdutoService;
+import com.food.marcosfood.ipi.assembler.FotoProdutoAssembler;
+import com.food.marcosfood.ipi.model.FotoProdutoDto;
 import com.food.marcosfood.ipi.model.input.FotoProdutoInput;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -17,25 +22,31 @@ import javax.validation.Valid;
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
 
+    @Autowired
+    ProdutoService produtoService;
+    @Autowired
+    private CatalagoFotoProdutoService catalagoFotoProdutoServicec;
+
+    @Autowired
+    FotoProdutoAssembler fotoProdutoAssembler;
+
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void atualizarFoto(@PathVariable Long restauranteId,
-                              @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
+    public FotoProdutoDto atualizarFoto(@PathVariable Long restauranteId,
+                                        @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
 
-        var nomeArquivo = UUID.randomUUID()
-                + "_" + fotoProdutoInput.getArquivo().getOriginalFilename();
+        Produto produto = produtoService.buscaPorId(restauranteId, produtoId);
+        MultipartFile arquivo = fotoProdutoInput.getArquivo();
+        FotoProduto foto = new FotoProduto();
 
-        var arquivoFoto = Path.of("C:/Users/alan3/OneDrive/Imagens", nomeArquivo);
+        foto.setProduto(produto);
+        foto.setDescricao(fotoProdutoInput.getDescricao());
+        foto.setContentType(arquivo.getContentType());
+        foto.setTamanho(arquivo.getSize());
+        foto.setNomeArquivo(arquivo.getOriginalFilename());
 
-        System.out.println(fotoProdutoInput.getDescricao());
-        System.out.println(arquivoFoto);
-        System.out.println(fotoProdutoInput.getArquivo().getContentType());
 
-        try {
-            fotoProdutoInput.getArquivo().transferTo(arquivoFoto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+       FotoProduto  fotoProduto = catalagoFotoProdutoServicec.salvar(foto);
+       return fotoProdutoAssembler.toModell(fotoProduto);
     }
 
 }

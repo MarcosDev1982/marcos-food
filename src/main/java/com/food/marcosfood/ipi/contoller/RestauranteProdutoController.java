@@ -42,7 +42,7 @@ public class RestauranteProdutoController {
         List<Produto> todosProdutos= null;
 
         if (incluirInativo){
-          produtoRepository.findByRestaurante(restaurante);
+          produtoRepository.findTodosByRestaurante(restaurante);
         }else{
             todosProdutos = produtoRepository.findAtivosByRestaurante(restaurante);
         }
