@@ -3,6 +3,7 @@ package com.food.marcosfood.ipi.contoller;
 import com.food.marcosfood.domain.model.FotoProduto;
 import com.food.marcosfood.domain.model.Produto;
 import com.food.marcosfood.domain.service.CatalagoFotoProdutoService;
+import com.food.marcosfood.domain.service.FotoStorageService;
 import com.food.marcosfood.domain.service.ProdutoService;
 import com.food.marcosfood.ipi.assembler.FotoProdutoAssembler;
 import com.food.marcosfood.ipi.model.FotoProdutoDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @RestController
@@ -25,14 +27,16 @@ public class RestauranteProdutoFotoController {
     @Autowired
     ProdutoService produtoService;
     @Autowired
-    private CatalagoFotoProdutoService catalagoFotoProdutoServicec;
+    private CatalagoFotoProdutoService catalagoFotoProdutoService;
+
+
 
     @Autowired
     FotoProdutoAssembler fotoProdutoAssembler;
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoDto atualizarFoto(@PathVariable Long restauranteId,
-                                        @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
+                                        @PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
 
         Produto produto = produtoService.buscaPorId(restauranteId, produtoId);
         MultipartFile arquivo = fotoProdutoInput.getArquivo();
@@ -45,7 +49,7 @@ public class RestauranteProdutoFotoController {
         foto.setNomeArquivo(arquivo.getOriginalFilename());
 
 
-       FotoProduto  fotoProduto = catalagoFotoProdutoServicec.salvar(foto);
+       FotoProduto  fotoProduto = catalagoFotoProdutoService.salvar(foto, arquivo.getInputStream());
        return fotoProdutoAssembler.toModell(fotoProduto);
     }
 
