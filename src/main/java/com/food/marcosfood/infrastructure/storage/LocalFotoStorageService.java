@@ -1,6 +1,7 @@
 package com.food.marcosfood.infrastructure.storage;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -14,6 +15,18 @@ public class LocalFotoStorageService implements FotoStorageService {
 
     @Value("${marcosfood.storage.local.diretorio-fotos}")
     private Path diretorioFotos;
+
+    @Override
+    public InputStream recuperar(String nomeArquivo) {
+      try {
+          Path arquivoPath = getArquivoPath(nomeArquivo);
+          return Files.newInputStream(arquivoPath);
+      }catch (Exception e){
+          throw new StorageException("Não foi possível recuperar arquivo.", e);
+      }
+
+
+    }
 
     @Override
     public void armazenar(NovaFoto novaFoto) {
