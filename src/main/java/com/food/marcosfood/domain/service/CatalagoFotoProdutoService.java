@@ -1,5 +1,6 @@
 package com.food.marcosfood.domain.service;
 
+import com.food.marcosfood.domain.exception.FotoProdutoNaoEncontradoException;
 import com.food.marcosfood.domain.model.FotoProduto;
 import com.food.marcosfood.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class CatalagoFotoProdutoService {
 
 
     }
+
+    public FotoProduto buscarOuFalhar(Long restuaranteId, Long produtoId){
+        return produtoRepository.findFotoById(restuaranteId, produtoId).orElseThrow(()-> new FotoProdutoNaoEncontradoException(restuaranteId, produtoId));
+    }
+
 
 
 }
