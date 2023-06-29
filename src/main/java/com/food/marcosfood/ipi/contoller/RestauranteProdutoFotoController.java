@@ -11,6 +11,7 @@ import com.food.marcosfood.ipi.model.FotoProdutoDto;
 import com.food.marcosfood.ipi.model.input.FotoProdutoInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -93,4 +94,12 @@ public class RestauranteProdutoFotoController {
             throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
         }
     }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluirFotoProduto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        catalagoFotoProdutoService.deletar(restauranteId, produtoId);
+
+    }
+
 }

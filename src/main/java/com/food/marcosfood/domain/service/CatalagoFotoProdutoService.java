@@ -49,10 +49,16 @@ public class CatalagoFotoProdutoService {
 
     }
 
-    public FotoProduto buscarOuFalhar(Long restuaranteId, Long produtoId){
-        return produtoRepository.findFotoById(restuaranteId, produtoId).orElseThrow(()-> new FotoProdutoNaoEncontradoException(restuaranteId, produtoId));
+    public FotoProduto buscarOuFalhar(Long restuaranteId, Long produtoId) {
+        return produtoRepository.findFotoById(restuaranteId, produtoId).orElseThrow(() -> new FotoProdutoNaoEncontradoException(restuaranteId, produtoId));
     }
 
 
+    public void deletar(Long restauranteId, Long produtoId) {
+        FotoProduto fotoById = buscarOuFalhar(restauranteId, produtoId);
+        produtoRepository.delete(fotoById);
+        produtoRepository.flush();
 
+        fotoStorageService.remover(fotoById.getNomeArquivo());
+    }
 }
