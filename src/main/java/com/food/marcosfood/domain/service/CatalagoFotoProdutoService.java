@@ -36,7 +36,8 @@ public class CatalagoFotoProdutoService {
         foto = produtoRepository.save(foto);
         produtoRepository.flush();
         FotoStorageService.NovaFoto novaFoto = FotoStorageService.NovaFoto.builder()
-                .nomeAquivo(foto.getNomeArquivo())
+                .nomeArquivo(foto.getNomeArquivo())
+                .contentType(foto.getContentType())
                 .inputStream(dadosArquivo)
                 .build();
 
