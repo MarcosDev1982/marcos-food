@@ -1,4 +1,4 @@
-package com.food.marcosfood.ipi.assembler;
+package com.food.marcosfood.ipi.model.input.assembler;
 
 import com.food.marcosfood.domain.model.Grupo;
 import com.food.marcosfood.ipi.model.input.GrupoInput;

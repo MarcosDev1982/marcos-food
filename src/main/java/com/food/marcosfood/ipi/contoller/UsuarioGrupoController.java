@@ -2,7 +2,7 @@ package com.food.marcosfood.ipi.contoller;
 
 import com.food.marcosfood.domain.model.Usuario;
 import com.food.marcosfood.domain.service.UsuarioService;
-import com.food.marcosfood.ipi.assembler.GrupoModelAssembler;
+import com.food.marcosfood.ipi.model.input.assembler.GrupoModelAssembler;
 import com.food.marcosfood.ipi.model.GrupoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

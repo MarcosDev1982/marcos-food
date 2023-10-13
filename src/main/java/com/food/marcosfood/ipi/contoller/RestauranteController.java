@@ -8,14 +8,13 @@ import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.exception.RestauranteNaoEncontadaException;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.service.RestauranteService;
-import com.food.marcosfood.ipi.assembler.RestauranteInputDesassembler;
-import com.food.marcosfood.ipi.assembler.RestauranteModelAssembler;
+import com.food.marcosfood.ipi.model.input.assembler.RestauranteInputDesassembler;
+import com.food.marcosfood.ipi.model.input.assembler.RestauranteModelAssembler;
 import com.food.marcosfood.ipi.model.RestauranteDTO;
 import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import com.food.marcosfood.ipi.model.view.RestauranteView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 

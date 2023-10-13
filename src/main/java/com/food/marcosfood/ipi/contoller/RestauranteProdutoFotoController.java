@@ -6,7 +6,7 @@ import com.food.marcosfood.domain.model.Produto;
 import com.food.marcosfood.domain.service.CatalagoFotoProdutoService;
 import com.food.marcosfood.domain.service.FotoStorageService;
 import com.food.marcosfood.domain.service.ProdutoService;
-import com.food.marcosfood.ipi.assembler.FotoProdutoAssembler;
+import com.food.marcosfood.ipi.model.input.assembler.FotoProdutoAssembler;
 import com.food.marcosfood.ipi.model.FotoProdutoDto;
 import com.food.marcosfood.ipi.model.input.FotoProdutoInput;
 import org.springframework.beans.factory.annotation.Autowired;

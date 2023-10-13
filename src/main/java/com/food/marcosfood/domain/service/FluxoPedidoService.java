@@ -5,16 +5,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class FluxoPedidoService {
 
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private EnvioEmailService envioEmailService;
+
     @Transactional
     public void comfirmar(String pedidoId) {
         Pedido pedido = pedidoService.buscarPorId(pedidoId);
         pedido.confirma();
+
+        Set<String> destinatarios = new HashSet<>();
+
+        destinatarios.add(pedido.getCliente().getEmail());
+
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto(pedido.getRestaurante().getNome() + "- Pedido Confirmado")
+                .corpo("O pedidode código <strong>" + pedido.getCodigo() + "</strong> foi confirmado !")
+                .destinatario(destinatarios)
+                .build();
+
+        envioEmailService.enviar(mensagem);
+
     }
 
     @Transactional

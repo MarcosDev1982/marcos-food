@@ -2,15 +2,12 @@ package com.food.marcosfood.ipi.contoller;
 
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.service.RestauranteService;
-import com.food.marcosfood.ipi.assembler.FormaPagamentoAssembler;
+import com.food.marcosfood.ipi.model.input.assembler.FormaPagamentoAssembler;
 import com.food.marcosfood.ipi.model.FormaPagementoDTO;
-import com.food.marcosfood.ipi.model.RestauranteDTO;
-import com.food.marcosfood.ipi.model.input.RestauranteInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
