@@ -1,10 +1,12 @@
 package com.food.marcosfood.domain.model;
 
 import com.food.marcosfood.domain.enumeration.StatusPedido;
+import com.food.marcosfood.domain.events.PedidoConfirmadoEvent;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,7 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class Pedido {
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 
     @EqualsAndHashCode.Include
     @Id
@@ -85,6 +87,7 @@ public class Pedido {
     public void confirma() {
         setStatus(StatusPedido.CONFIRMADO);
         setDataConfirmacao(OffsetDateTime.now());
+        registerEvent(new PedidoConfirmadoEvent(this));
     }
 
     public void entregar() {

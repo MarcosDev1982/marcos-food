@@ -1,6 +1,7 @@
 package com.food.marcosfood.domain.service;
 
 import com.food.marcosfood.domain.model.Pedido;
+import com.food.marcosfood.domain.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,23 +18,29 @@ public class FluxoPedidoService {
     @Autowired
     private EnvioEmailService envioEmailService;
 
+    @Autowired
+    PedidoRepository pedidoRepository;
+
     @Transactional
     public void comfirmar(String pedidoId) {
         Pedido pedido = pedidoService.buscarPorId(pedidoId);
         pedido.confirma();
+        pedidoRepository.save(pedido);
 
-        Set<String> destinatarios = new HashSet<>();
+
+
+       /*  Set<String> destinatarios = new HashSet<>();
 
         destinatarios.add(pedido.getCliente().getEmail());
 
-        var mensagem = EnvioEmailService.Mensagem.builder()
+       var mensagem = EnvioEmailService.Mensagem.builder()
                 .assunto(pedido.getRestaurante().getNome() + "- Pedido Confirmado")
                 .corpo("pedido-confirmado.html")
                 .variavel("pedido", pedido)
                 .destinatario(destinatarios)
                 .build();
 
-        envioEmailService.enviar(mensagem);
+        envioEmailService.enviar(mensagem);*/
 
     }
 
