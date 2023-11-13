@@ -3,7 +3,7 @@ package com.food.marcosfood.infrastructure.service.query;
 import com.food.marcosfood.domain.fiter.VendasDiariasFilter;
 import com.food.marcosfood.domain.model.Pedido;
 import com.food.marcosfood.domain.service.VendaQuerYService;
-import com.food.marcosfood.ipi.model.VendaDiaria;
+import com.food.marcosfood.api.model.VendaDiaria;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

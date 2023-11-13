@@ -3,8 +3,10 @@ package com.food.marcosfood.domain.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -19,4 +21,8 @@ public class FormaPagamento {
 
     @JoinColumn(nullable = false)
     private String descricao;
+
+    @UpdateTimestamp
+    private OffsetDateTime dataAtualizacao;
+
 }

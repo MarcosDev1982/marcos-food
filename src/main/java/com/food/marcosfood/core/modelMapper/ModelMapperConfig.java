@@ -2,8 +2,8 @@ package com.food.marcosfood.core.modelMapper;
 
 import com.food.marcosfood.domain.model.Endereco;
 import com.food.marcosfood.domain.model.ItemPedido;
-import com.food.marcosfood.ipi.model.EnderecoDTO;
-import com.food.marcosfood.ipi.model.input.ItemPedidoInput;
+import com.food.marcosfood.api.model.EnderecoDTO;
+import com.food.marcosfood.api.model.input.ItemPedidoInput;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
