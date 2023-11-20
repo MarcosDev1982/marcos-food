@@ -1,13 +1,14 @@
 package com.food.marcosfood.api.exceptionhander;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@ApiModel("Problema")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Builder
@@ -20,8 +21,9 @@ public class Problema {
     private String detail;
     private String userMessage;
     private List<Object> objects;
-    private List<Object> object = new ArrayList<>();
 
+
+    @ApiModel("ObjetoProblema")
     @Getter
     @Builder
     public static class Object{
