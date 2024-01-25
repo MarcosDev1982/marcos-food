@@ -12,6 +12,8 @@ import com.food.marcosfood.api.model.input.assembler.PedidoResumoAssembler;
 import com.food.marcosfood.api.model.PedidoDTO;
 import com.food.marcosfood.api.model.PedidoResumoDTO;
 import com.food.marcosfood.api.model.input.PedidoInput;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,7 +40,8 @@ public class PedidoController {
 
     @Autowired
     private PedidoRepository pedidoRepository;
-
+@ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
+})
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size = 10) Pageable pageable) {
@@ -68,7 +71,8 @@ public class PedidoController {
 
     }*/
 
-
+    @ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
+    })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{codigoPedido}")
     public PedidoDTO buscaPedidoPorId(@PathVariable String codigoPedido) {
