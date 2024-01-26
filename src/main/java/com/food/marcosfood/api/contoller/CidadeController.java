@@ -1,31 +1,28 @@
 package com.food.marcosfood.api.contoller;
 
 import com.food.marcosfood.api.ResourceUriHelper;
-import com.food.marcosfood.core.openapi.controller.CidadeControllerOpenApi;
 import com.food.marcosfood.api.model.CidadeDTO;
 import com.food.marcosfood.api.model.input.CidadeInput;
 import com.food.marcosfood.api.model.input.assembler.CidadeModelAssembler;
 import com.food.marcosfood.api.model.input.assembler.CidadeModelDesAssembler;
+import com.food.marcosfood.core.openapi.controller.CidadeControllerOpenApi;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.EstadoNaoEncotradoException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.service.CidadeService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @RestController
@@ -53,11 +50,25 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeDTO findAllById(@PathVariable Long cidadeId) {
         try {
 
-            return cidadeModelAssembler.toModell(cidadeService.findByIdCidade(cidadeId));
 
+            CidadeDTO cidadeDTO = cidadeModelAssembler.toModell(cidadeService.findByIdCidade(cidadeId));
+
+            cidadeDTO.add(linkTo(methodOn(CidadeController.class)
+                    .findAllById(cidadeDTO.getId()))
+                    .withSelfRel());
+
+            cidadeDTO.add((linkTo(methodOn(CidadeController.class)
+                    .findAll()).withRel("cidades")));
+
+            cidadeDTO.getEstado().add(linkTo(methodOn(EstadoController.class)
+                    .buscarPorId(cidadeDTO.getEstado().getId()))
+                    .withSelfRel());
+
+            return cidadeDTO;
         } catch (CozinhaNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
         }
+
 
     }
 
@@ -91,7 +102,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @DeleteMapping("/{cidadeId}")
-    public void delete(@ApiParam(value = "ID de um caidade", example = "1")@PathVariable Long cidadeId) {
+    public void delete(@ApiParam(value = "ID de um caidade", example = "1") @PathVariable Long cidadeId) {
 
         cidadeService.remover(cidadeId);
 
