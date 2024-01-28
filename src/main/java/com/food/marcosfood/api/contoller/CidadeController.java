@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 
 @RestController
 @RequestMapping(path = "/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,25 +39,10 @@ public class CidadeController implements CidadeControllerOpenApi {
     @GetMapping
     public CollectionModel<CidadeDTO> findAll() {
 
-        List<CidadeDTO> cidadeDTOS = cidadeModelAssembler.toCollectionModel(cidadeService.findAllCidade());
-        cidadeDTOS.forEach(cidadeDTO -> {
-            cidadeDTO.add(linkTo(methodOn(CidadeController.class)
-                    .findAllById(cidadeDTO.getId()))
-                    .withSelfRel());
+        List<Cidade> todasCidades = cidadeService.findAllCidade();
 
-            cidadeDTO.add((linkTo(methodOn(CidadeController.class)
-                    .findAll()).withRel("cidades")));
+        return cidadeModelAssembler.toCollectionModel(todasCidades);
 
-            cidadeDTO.getEstado().add(linkTo(methodOn(EstadoController.class)
-                    .buscarPorId(cidadeDTO.getEstado().getId()))
-                    .withSelfRel());
-        });
-
-        CollectionModel<CidadeDTO> cidadesCollectionModel = CollectionModel.of(cidadeDTOS);
-
-        cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-
-        return cidadesCollectionModel;
     }
 
 
@@ -68,21 +50,8 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeDTO findAllById(@PathVariable Long cidadeId) {
         try {
 
+            return cidadeModelAssembler.toModel(cidadeService.findByIdCidade(cidadeId));
 
-            CidadeDTO cidadeDTO = cidadeModelAssembler.toModell(cidadeService.findByIdCidade(cidadeId));
-
-            cidadeDTO.add(linkTo(methodOn(CidadeController.class)
-                    .findAllById(cidadeDTO.getId()))
-                    .withSelfRel());
-
-            cidadeDTO.add((linkTo(methodOn(CidadeController.class)
-                    .findAll()).withRel("cidades")));
-
-            cidadeDTO.getEstado().add(linkTo(methodOn(EstadoController.class)
-                    .buscarPorId(cidadeDTO.getEstado().getId()))
-                    .withSelfRel());
-
-            return cidadeDTO;
         } catch (CozinhaNaoEncontadaException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
         }
@@ -95,7 +64,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeDTO create(@RequestBody @Valid CidadeInput cidadeInput) {
         try {
             Cidade cidade = cidadeModelDesAssembler.toDomainObejct(cidadeInput);
-            CidadeDTO cidadeDTO = cidadeModelAssembler.toModell(cidadeService.cadastraCidade(cidade));
+            CidadeDTO cidadeDTO = cidadeModelAssembler.toModel(cidadeService.cadastraCidade(cidade));
 
             ResourceUriHelper.addUriResponseHeder(cidadeDTO.getId());
 
@@ -114,7 +83,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         Cidade cidadeAtual = cidadeService.findByIdCidade(cidadeId);
         cidadeModelDesAssembler.copyToDomainObeject(cidadeInput, cidadeAtual);
-        return cidadeModelAssembler.toModell(cidadeService.cadastraCidade(cidadeAtual));
+        return cidadeModelAssembler.toModel(cidadeService.cadastraCidade(cidadeAtual));
 
 
     }
