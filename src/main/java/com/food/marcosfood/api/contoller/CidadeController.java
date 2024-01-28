@@ -13,7 +13,7 @@ import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.service.CidadeService;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +40,27 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 
     @GetMapping
-    public List<CidadeDTO> findAll() {
+    public CollectionModel<CidadeDTO> findAll() {
 
-        return cidadeModelAssembler.toCollectionModel(cidadeService.findAllCidade());
+        List<CidadeDTO> cidadeDTOS = cidadeModelAssembler.toCollectionModel(cidadeService.findAllCidade());
+        cidadeDTOS.forEach(cidadeDTO -> {
+            cidadeDTO.add(linkTo(methodOn(CidadeController.class)
+                    .findAllById(cidadeDTO.getId()))
+                    .withSelfRel());
+
+            cidadeDTO.add((linkTo(methodOn(CidadeController.class)
+                    .findAll()).withRel("cidades")));
+
+            cidadeDTO.getEstado().add(linkTo(methodOn(EstadoController.class)
+                    .buscarPorId(cidadeDTO.getEstado().getId()))
+                    .withSelfRel());
+        });
+
+        CollectionModel<CidadeDTO> cidadesCollectionModel = CollectionModel.of(cidadeDTOS);
+
+        cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
+
+        return cidadesCollectionModel;
     }
 
 
