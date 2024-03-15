@@ -9,6 +9,9 @@ import com.food.marcosfood.api.model.input.assembler.CozinhaModelAssembler;
 import com.food.marcosfood.api.model.input.assembler.CozinhaModelDesAssembler;
 import com.food.marcosfood.api.model.CozinhaDTO;
 import com.food.marcosfood.api.model.input.CozinhaInput;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/cozinha")
 public class CozinhaController {
+
+
 
     @Autowired
     CozinhaModelDesAssembler cozinhaModelDesAssembler;
@@ -34,6 +39,9 @@ public class CozinhaController {
 
     @GetMapping("/cozinhas")
     private Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
+        log.info("Listando cozinhas {}", pageable.getPageSize());
+
+
         Page<Cozinha> cozinhaPage = cozinhaService.list(pageable);
         List<CozinhaDTO> cozinhaDTOList = cozinhaModelAssembler.toCollectionModel(cozinhaPage.getContent());
         Page<CozinhaDTO> cozinhaDTOPage = new PageImpl<>(cozinhaDTOList, pageable, cozinhaPage.getTotalElements());
