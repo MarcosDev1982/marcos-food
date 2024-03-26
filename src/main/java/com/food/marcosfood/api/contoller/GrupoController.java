@@ -1,5 +1,6 @@
 package com.food.marcosfood.api.contoller;
 
+import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.domain.model.Grupo;
 import com.food.marcosfood.api.model.input.GrupoInput;
 import com.food.marcosfood.domain.service.GrupoService;
@@ -26,27 +27,27 @@ public class GrupoController {
 
     @Autowired
     private GrupoModelDesassembler grupoModelDesassembler;
-
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public ResponseEntity<List<GrupoDTO>> buscarTodos() {
         List<Grupo> grupo = grupoService.buscarTodos();
         return ResponseEntity.status(HttpStatus.OK).body(grupoModelAssembler.toCollectionModel(grupo));
 
     }
-
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{grupoId}")
     public ResponseEntity<GrupoDTO> buscarPorId(@PathVariable Long grupoId) {
         Grupo grupo = grupoService.buscarPorId(grupoId);
         return ResponseEntity.status(HttpStatus.OK).body(grupoModelAssembler.toModel(grupo));
     }
-
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     public GrupoDTO cadastrarGrupo(@RequestBody @Valid GrupoInput grupoInput) {
         Grupo grupo = grupoModelDesassembler.toDomainObject(grupoInput);
         GrupoDTO grupoDTO = grupoModelAssembler.toModel(grupoService.cadastraGrupo(grupo));
         return ResponseEntity.status(HttpStatus.CREATED).body(grupoDTO).getBody();
     }
-
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{grupoId}")
     public GrupoDTO alterarGrupo(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 
@@ -57,7 +58,7 @@ public class GrupoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(grupoModelAssembler.toModel(grupoAtual)).getBody();
     }
-
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long grupoId) {

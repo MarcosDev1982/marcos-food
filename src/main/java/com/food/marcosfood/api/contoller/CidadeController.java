@@ -6,6 +6,7 @@ import com.food.marcosfood.api.model.input.CidadeInput;
 import com.food.marcosfood.api.model.input.assembler.CidadeModelAssembler;
 import com.food.marcosfood.api.model.input.assembler.CidadeModelDesAssembler;
 import com.food.marcosfood.core.openapi.controller.CidadeControllerOpenApi;
+import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.domain.exception.CozinhaNaoEncontadaException;
 import com.food.marcosfood.domain.exception.EstadoNaoEncotradoException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
@@ -35,7 +36,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeModelDesAssembler cidadeModelDesAssembler;
 
-
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeDTO> findAll() {
 
@@ -45,7 +46,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     }
 
-
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping("/{cidadeId}")
     public CidadeDTO findAllById(@PathVariable Long cidadeId) {
         try {
@@ -58,7 +59,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 
     }
-
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeDTO create(@RequestBody @Valid CidadeInput cidadeInput) {
@@ -76,7 +77,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
 
     }
-
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeDTO alterCidade(@ApiParam(value = "ID de um caidade", example = "1") @PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 
@@ -87,7 +88,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 
     }
-
+    @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     public void delete(@ApiParam(value = "ID de um caidade", example = "1") @PathVariable Long cidadeId) {
 

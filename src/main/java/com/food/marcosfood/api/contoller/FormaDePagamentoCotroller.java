@@ -1,5 +1,6 @@
 package com.food.marcosfood.api.contoller;
 
+import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.domain.exception.FormaPagementoNaoEncontadaException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.FormaPagamento;
@@ -38,6 +39,7 @@ public class FormaDePagamentoCotroller {
     @Autowired
     FormaPagamentoRepository formaPagamentoRepository;
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping
     public ResponseEntity<List<FormaPagementoDTO>> buscaTodas(ServletWebRequest request) {
 
@@ -59,9 +61,9 @@ public class FormaDePagamentoCotroller {
                 .eTag(eTag)
                 .body(formaDePagamento);
     }
-
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping("/{formaDePagamentoId}")
-    public ResponseEntity<FormaPagementoDTO> buscaPorId(@PathVariable Long formaPagamentoId) {
+    public ResponseEntity<FormaPagementoDTO> buscaPorId(@PathVariable Long formaPagamentoId, Object o) {
         FormaPagementoDTO formaDePagementoDTO = formaDePagamentoAssembler.toModell(formadePagmentoService.findById(formaPagamentoId));
 
 
@@ -69,7 +71,7 @@ public class FormaDePagamentoCotroller {
                 .cacheControl(CacheControl.maxAge(10,TimeUnit.SECONDS))
                 .body(formaDePagementoDTO);
     }
-
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping
     public ResponseEntity<FormaPagementoDTO> cadastroFormaDePagamento(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
         try {
@@ -80,7 +82,7 @@ public class FormaDePagamentoCotroller {
         }
 
     }
-
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping("/{formaPagamentoId}")
     public ResponseEntity<FormaPagementoDTO> alterarFormaPagamento(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoInput formaDePagamentoInput) {
         try {
@@ -92,7 +94,7 @@ public class FormaDePagamentoCotroller {
         }
 
     }
-
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("{formaPagmantoId}")
     public void deltarFormarPagamento(@PathVariable Long formaPagmantoId) {
         formadePagmentoService.delete(formaPagmantoId);

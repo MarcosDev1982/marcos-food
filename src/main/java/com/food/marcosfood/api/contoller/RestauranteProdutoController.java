@@ -1,5 +1,6 @@
 package com.food.marcosfood.api.contoller;
 
+import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.domain.model.Produto;
 import com.food.marcosfood.domain.model.Restaurante;
 import com.food.marcosfood.domain.repository.ProdutoRepository;
@@ -10,6 +11,7 @@ import com.food.marcosfood.api.model.input.assembler.ProdutoDesassembler;
 import com.food.marcosfood.api.model.ProdutoDTO;
 import com.food.marcosfood.api.model.input.ProdutoInput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("restaurante/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
     @Autowired
     private ProdutoService produtoService;
@@ -37,7 +39,7 @@ public class RestauranteProdutoController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProdutoDTO> buscarTodos(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativo) {
+    public List<ProdutoDTO> listar(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativo) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         List<Produto> todosProdutos= null;
 
@@ -52,7 +54,7 @@ public class RestauranteProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProdutoDTO cadastarProduto(@RequestBody @Valid ProdutoInput produtoInput, @PathVariable Long restauranteId) {
+    public ProdutoDTO adicionar(@RequestBody @Valid ProdutoInput produtoInput, @PathVariable Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
 
         Produto produto = produtoDesassembler.toDomainObject(produtoInput);
@@ -75,6 +77,24 @@ public class RestauranteProdutoController {
 
         return produtoAssembler.toModel(produtoAtual);
 
+    }
+
+    @Override
+    public CollectionModel<ProdutoDTO> listar(Long restauranteId, Boolean incluirInativos) {
+        return null;
+    }
+
+    @CheckSecurity.Restaurantes.PodeConsultar
+    @GetMapping("/{produtoId}")
+    public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        Produto produto = produtoService.buscaPorId(restauranteId, produtoId);
+
+        return produtoAssembler.toModel(produto);
+    }
+
+    @Override
+    public ProdutoDTO adicionar(Long restauranteId, ProdutoInput produtoInput) {
+        return null;
     }
 
 

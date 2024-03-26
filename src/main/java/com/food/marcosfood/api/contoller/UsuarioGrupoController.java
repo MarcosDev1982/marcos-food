@@ -6,6 +6,7 @@ import com.food.marcosfood.api.model.input.assembler.GrupoModelAssembler;
 import com.food.marcosfood.api.model.GrupoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,16 @@ public class UsuarioGrupoController {
 
     @PutMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+    public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
        usuarioService.associarGrupo(usuarioId, grupoId);
+        return  ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
+    public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.desassociarGrupo(usuarioId, grupoId);
+        return  ResponseEntity.noContent().build();
     }
 
 

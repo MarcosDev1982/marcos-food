@@ -10,6 +10,7 @@ import com.food.marcosfood.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class UsuarioService {
 
     private static final String USUARIO_JA_COM_EMAIL = "Já existe um usuário c cadastrado com email %s";
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -50,8 +53,8 @@ public class UsuarioService {
 
         Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
 
-        if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)){
-            throw new NegocioExcepetion(String.format(USUARIO_JA_COM_EMAIL, usuario.getEmail()));
+        if (usuario.isNovo()) {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         }
         return usuarioRepository.save(usuario);
     }
@@ -72,7 +75,7 @@ public class UsuarioService {
     public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
         Usuario usuario = buscarPorId(usuarioId);
 
-        if (usuario.senhaNaoCoincideCom(senhaAtual)) {
+        if (!passwordEncoder.matches(senhaAtual, usuario.getSenha())) {
             throw new NegocioExcepetion("Senha atual informada não coincide com a senha do usuário.");
         }
 

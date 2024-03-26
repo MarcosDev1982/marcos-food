@@ -1,17 +1,22 @@
 package com.food.marcosfood.api.contoller;
 
-import com.food.marcosfood.core.data.PageableTranslator;
-import com.food.marcosfood.domain.model.Pedido;
-import com.food.marcosfood.domain.repository.PedidoRepository;
-import com.food.marcosfood.domain.fiter.PedidoFilter;
-import com.food.marcosfood.domain.service.PedidoService;
-import com.food.marcosfood.infrastructure.respository.spec.PedidoSpecs;
-import com.food.marcosfood.api.model.input.assembler.PedidoAssembler;
-import com.food.marcosfood.api.model.input.assembler.PedidoInputDesassembler;
-import com.food.marcosfood.api.model.input.assembler.PedidoResumoAssembler;
 import com.food.marcosfood.api.model.PedidoDTO;
 import com.food.marcosfood.api.model.PedidoResumoDTO;
 import com.food.marcosfood.api.model.input.PedidoInput;
+import com.food.marcosfood.api.model.input.assembler.PedidoAssembler;
+import com.food.marcosfood.api.model.input.assembler.PedidoInputDesassembler;
+import com.food.marcosfood.api.model.input.assembler.PedidoResumoAssembler;
+import com.food.marcosfood.core.data.PageableTranslator;
+import com.food.marcosfood.core.security.CheckSecurity;
+import com.food.marcosfood.core.security.MarcosSecurity;
+import com.food.marcosfood.domain.exception.EntidadeNaoEncotrada;
+import com.food.marcosfood.domain.exception.NegocioExcepetion;
+import com.food.marcosfood.domain.fiter.PedidoFilter;
+import com.food.marcosfood.domain.model.Pedido;
+import com.food.marcosfood.domain.model.Usuario;
+import com.food.marcosfood.domain.repository.PedidoRepository;
+import com.food.marcosfood.domain.service.PedidoService;
+import com.food.marcosfood.infrastructure.respository.spec.PedidoSpecs;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +45,13 @@ public class PedidoController {
 
     @Autowired
     private PedidoRepository pedidoRepository;
-@ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
-})
+
+    @Autowired
+    private MarcosSecurity marcosSecurity;
+
+    @CheckSecurity.Pedidos.PodePesquisar
+    @ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
+    })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size = 10) Pageable pageable) {
@@ -51,26 +61,27 @@ public class PedidoController {
         Page<PedidoResumoDTO> pedidoResumoDTOPage = new PageImpl<>(pedidoResumoDTOList, pageable, pedidoPage.getTotalElements());
         return pedidoResumoDTOPage;
     }
-/*    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public MappingJacksonValue buscaTodos(@RequestParam(required = false) String campos) {
 
-        List<Pedido> pedidoList = pedidoService.pedidoList();
-        List<PedidoResumoDTO> pedidoResumoDTOS = pedidoResumoAssembler.toCollectonDto(pedidoList);
+    /*    @ResponseStatus(HttpStatus.OK)
+        @GetMapping
+        public MappingJacksonValue buscaTodos(@RequestParam(required = false) String campos) {
 
-        MappingJacksonValue pedidosMappingJacksonValue = new MappingJacksonValue(pedidoResumoDTOS);
+            List<Pedido> pedidoList = pedidoService.pedidoList();
+            List<PedidoResumoDTO> pedidoResumoDTOS = pedidoResumoAssembler.toCollectonDto(pedidoList);
 
-        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-        if (StringUtils.isNotBlank(campos)) {
-            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
-        }
-        pedidosMappingJacksonValue.setFilters(filterProvider);
+            MappingJacksonValue pedidosMappingJacksonValue = new MappingJacksonValue(pedidoResumoDTOS);
 
-        return pedidosMappingJacksonValue;
+            SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+            if (StringUtils.isNotBlank(campos)) {
+                filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+            }
+            pedidosMappingJacksonValue.setFilters(filterProvider);
 
-    }*/
+            return pedidosMappingJacksonValue;
 
+        }*/
+    @CheckSecurity.Pedidos.PodePesquisar
     @ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
     })
     @ResponseStatus(HttpStatus.OK)
@@ -80,14 +91,18 @@ public class PedidoController {
         return pedidoAssembler.toDto(pedido);
     }
 
+    @CheckSecurity.Pedidos.PodeCriar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoDTO cadastraPedido(@RequestBody PedidoInput pedidoInput) {
         try {
-            Pedido pedido = pedidoService.cadastraPedido(pedidoInputDesassembler.toDomainObject(pedidoInput));
-            return pedidoAssembler.toDto(pedido);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            Pedido novopedido = pedidoInputDesassembler.toDomainObject(pedidoInput);
+            novopedido.setCliente(new Usuario());
+            novopedido.getCliente().setId(marcosSecurity.getUsuarioId());
+            novopedido = pedidoService.cadastraPedido(novopedido);
+            return pedidoAssembler.toDto(novopedido);
+        } catch (EntidadeNaoEncotrada e) {
+            throw new NegocioExcepetion(e.getMessage(), e);
         }
 
     }
@@ -101,7 +116,6 @@ public class PedidoController {
         );
         return PageableTranslator.translate(pageable, mapeamento);
     }
-
 
 
 }

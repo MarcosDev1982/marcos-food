@@ -14,4 +14,5 @@ public interface RestauranteRepository extends CustonJpaRespostiory<Restaurante,
     @Query("from Restaurante r join r.cozinha")
     List<Restaurante>findAll();
 
+    boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }

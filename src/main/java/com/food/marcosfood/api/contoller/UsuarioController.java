@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.hateoas.CollectionModel;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,20 +32,21 @@ public class UsuarioController {
     private UsuarioDesassembler usuarioDesassembler;
 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> buscarTodos() {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toCollectionModel(usuarioService.buscarTodos()));
+    public CollectionModel<UsuarioDTO> buscarTodos() {
+        List<Usuario> todasUsuarios = usuarioService.buscarTodos();
+        return usuarioModelAssembler.toCollectionModel(todasUsuarios);
     }
 
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long usuarioId) {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toModell(usuarioService.buscarPorId(usuarioId)));
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toModel(usuarioService.buscarPorId(usuarioId)));
     }
 
     @PostMapping
     private ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody @Valid UsuarioInput usuarioInput) {
 
         Usuario usuario = usuarioDesassembler.toDomainObject(usuarioInput);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModelAssembler.toModell(usuarioService.salvar(usuario)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioModelAssembler.toModel(usuarioService.salvar(usuario)));
 
 
     }
@@ -58,7 +59,7 @@ public class UsuarioController {
 
             usuarioDesassembler.copyToDomainObject(usuarioAltInput, usuarioAtua);
             usuarioAtua = usuarioService.salvar(usuarioAtua);
-            return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toModell(usuarioAtua));
+            return ResponseEntity.status(HttpStatus.OK).body(usuarioModelAssembler.toModel(usuarioAtua));
         } catch (UsuarioNaoEncontadoException e) {
             throw new NegocioExcepetion(e.getMessage(), e);
         }

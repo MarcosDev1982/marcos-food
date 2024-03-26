@@ -2,10 +2,13 @@ package com.food.marcosfood.api.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-@Getter
+@Relation(collectionRelation = "usuarios")
 @Setter
-public class UsuarioDTO {
+@Getter
+public class UsuarioDTO extends RepresentationModel<UsuarioDTO> {
 
     private Long id;
     private String nome;

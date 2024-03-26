@@ -5,6 +5,7 @@ import com.food.marcosfood.domain.service.VendaQuerYService;
 import com.food.marcosfood.domain.service.VendaReportService;
 import com.food.marcosfood.api.model.VendaDiaria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,4 +42,6 @@ public class EstatisticasController {
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_PDF).headers(headers).body(bytesPdf);
     }
 
+    public static class EstatisticasModel extends RepresentationModel<EstatisticasModel> {
+    }
 }

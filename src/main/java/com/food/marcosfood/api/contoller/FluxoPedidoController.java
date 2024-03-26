@@ -1,8 +1,10 @@
 package com.food.marcosfood.api.contoller;
 
+import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.domain.service.FluxoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,28 +13,31 @@ public class FluxoPedidoController {
 
     @Autowired
     private FluxoPedidoService fluxoPedidoService;
-
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/comfirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirma(@PathVariable String codigoPedido) {
+    public ResponseEntity<Void> confirma(@PathVariable String codigoPedido) {
 
         fluxoPedidoService.comfirmar(codigoPedido);
+        return  ResponseEntity.noContent().build();
 
     }
-
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/entregue")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void entregue(@PathVariable String codigoPedido) {
+    public ResponseEntity<Void> entregue(@PathVariable String codigoPedido) {
 
         fluxoPedidoService.entregue(codigoPedido);
+        return  ResponseEntity.noContent().build();
 
     }
-
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/cancelado")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancela(@PathVariable String codigoPedido) {
+    public ResponseEntity<Void> cancela(@PathVariable String codigoPedido) {
 
         fluxoPedidoService.cancelar(codigoPedido);
+        return  ResponseEntity.noContent().build();
 
     }
 
