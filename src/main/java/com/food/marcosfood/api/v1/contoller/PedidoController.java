@@ -1,11 +1,11 @@
 package com.food.marcosfood.api.v1.contoller;
 
-import com.food.marcosfood.api.v1.model.PedidoDTO;
-import com.food.marcosfood.api.v1.model.PedidoResumoDTO;
-import com.food.marcosfood.api.v1.model.input.PedidoInput;
 import com.food.marcosfood.api.v1.assembler.PedidoAssembler;
 import com.food.marcosfood.api.v1.assembler.PedidoInputDesassembler;
 import com.food.marcosfood.api.v1.assembler.PedidoResumoAssembler;
+import com.food.marcosfood.api.v1.model.PedidoDTO;
+import com.food.marcosfood.api.v1.model.PedidoResumoDTO;
+import com.food.marcosfood.api.v1.model.input.PedidoInput;
 import com.food.marcosfood.core.data.PageableTranslator;
 import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.core.security.MarcosSecurity;
@@ -17,8 +17,6 @@ import com.food.marcosfood.domain.model.Usuario;
 import com.food.marcosfood.domain.repository.PedidoRepository;
 import com.food.marcosfood.domain.service.PedidoService;
 import com.food.marcosfood.infrastructure.respository.spec.PedidoSpecs;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -50,8 +48,6 @@ public class PedidoController {
     private MarcosSecurity marcosSecurity;
 
     @CheckSecurity.Pedidos.PodePesquisar
-    @ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
-    })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(PedidoFilter pedidoFilter, @PageableDefault(size = 10) Pageable pageable) {
@@ -82,8 +78,7 @@ public class PedidoController {
 
         }*/
     @CheckSecurity.Pedidos.PodePesquisar
-    @ApiImplicitParams({@ApiImplicitParam(value = "Nomes das propiedades para filtrar na respostam, separados por vírgula", name = "campos", paramType = "query", type = "string")
-    })
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{codigoPedido}")
     public PedidoDTO buscaPedidoPorId(@PathVariable String codigoPedido) {

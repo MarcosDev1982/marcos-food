@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("restaurante/{restauranteId}/produtos")
+@RequestMapping("/v1/restaurante/{restauranteId}/produtos")
 public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
     @Autowired

@@ -1,10 +1,10 @@
 package com.food.marcosfood.api.v1.contoller;
 
 import com.food.marcosfood.api.ResourceUriHelper;
-import com.food.marcosfood.api.v1.model.CidadeDTO;
-import com.food.marcosfood.api.v1.model.input.CidadeInput;
 import com.food.marcosfood.api.v1.assembler.CidadeModelAssembler;
 import com.food.marcosfood.api.v1.assembler.CidadeModelDesAssembler;
+import com.food.marcosfood.api.v1.model.CidadeDTO;
+import com.food.marcosfood.api.v1.model.input.CidadeInput;
 import com.food.marcosfood.api.v1.openapi.controller.CidadeControllerOpenApi;
 import com.food.marcosfood.core.security.CheckSecurity;
 import com.food.marcosfood.core.web.MarcosMediaTypes;
@@ -13,11 +13,9 @@ import com.food.marcosfood.domain.exception.EstadoNaoEncotradoException;
 import com.food.marcosfood.domain.exception.NegocioExcepetion;
 import com.food.marcosfood.domain.model.Cidade;
 import com.food.marcosfood.domain.service.CidadeService;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -60,6 +58,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 
     }
+
     @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,9 +77,10 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
 
     }
+
     @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
-    public CidadeDTO alterCidade(@ApiParam(value = "ID de um caidade", example = "1") @PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
+    public CidadeDTO alterCidade(@PathVariable Long cidadeId, @RequestBody @Valid CidadeInput cidadeInput) {
 
 
         Cidade cidadeAtual = cidadeService.findByIdCidade(cidadeId);
@@ -89,9 +89,10 @@ public class CidadeController implements CidadeControllerOpenApi {
 
 
     }
+
     @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
-    public void delete(@ApiParam(value = "ID de um caidade", example = "1") @PathVariable Long cidadeId) {
+    public void delete(@PathVariable Long cidadeId) {
 
         cidadeService.remover(cidadeId);
 

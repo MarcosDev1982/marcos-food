@@ -20,6 +20,7 @@
         <jasperreports.version>6.20.0</jasperreports.version>
         <aws-java-sdk-s3.version>1.12.336</aws-java-sdk-s3.version>
         <springfox.version>3.0.0</springfox.version>
+        <springdoc.version>1.6.9</springdoc.version>
     </properties>
 
     <dependencies>
@@ -143,21 +144,25 @@
         </dependency>
 
         <!-- Springfox -->
+
+
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-hateoas</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
-            <version>${springfox.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-security</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
+
+
 
         <!-- HATEOAS -->
         <dependency>
